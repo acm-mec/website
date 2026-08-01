@@ -1,28 +1,17 @@
 /**
  * CardPlaceholder — a subtle SVG code-pattern placeholder for cards
- * that have no cover image (events, blog posts).
+ * that have no cover image (events).
  *
- * variant: "event" | "blog"
+ * variant: "event"
  */
-export default function CardPlaceholder({ variant = "blog", className = "" }) {
-  const lines =
-    variant === "event"
-      ? [
-          "$ git log --oneline",
-          "a3f9c12 upcoming event scheduled",
-          "d82bc01 venue confirmed",
-          "4e1a087 registration opened",
-          "9f23cd4 initial planning",
-        ]
-      : [
-          "## getting started",
-          "",
-          "```bash",
-          "git clone <repo>",
-          "npm install",
-          "npm run dev",
-          "```",
-        ];
+export default function CardPlaceholder({ variant = "event", className = "" }) {
+  const lines = [
+    "$ git log --oneline",
+    "a3f9c12 upcoming event scheduled",
+    "d82bc01 venue confirmed",
+    "4e1a087 registration opened",
+    "9f23cd4 initial planning",
+  ];
 
   return (
     <div

@@ -3,23 +3,16 @@ import { ArrowRight, Users, Calendar, Clock3 } from "lucide-react";
 import { siteConfig } from "../data/siteConfig";
 import { events } from "../data/events";
 import { team } from "../data/team";
-import { posts } from "../data/posts";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
 import SectionHeading from "../components/ui/SectionHeading";
 import TypingHeadline from "../components/ui/TypingHeadline";
 import EventCard from "../components/shared/EventCard";
-import BlogPostCard from "../components/shared/BlogPostCard";
 
 const upcomingEvents = events
   .filter((e) => e.status === "upcoming")
   .sort((a, b) => new Date(a.date) - new Date(b.date))
   .slice(0, 3);
-
-const latestPosts = posts
-  .filter((p) => p.status === "published")
-  .sort((a, b) => new Date(b.date) - new Date(a.date))
-  .slice(0, 2);
 
 const stats = [
   {
@@ -172,42 +165,6 @@ export default function Home() {
               className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-indigo hover:text-[--color-indigo-hover] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded group"
             >
               Learn more about us
-              <ArrowRight
-                size={14}
-                aria-hidden="true"
-                className="group-hover:translate-x-0.5 transition-transform duration-150"
-              />
-            </Link>
-          </div>
-        </Container>
-      </section>
-
-      {/* ── Latest posts ── */}
-      <section className="py-16 md:py-24 bg-paper border-b border-rule">
-        <Container>
-          <SectionHeading
-            title="From the Blog"
-            subtitle="Written by members, for members — and anyone else who finds it useful."
-          />
-          {latestPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {latestPosts.map((post) => (
-                <BlogPostCard key={post.id} post={post} />
-              ))}
-            </div>
-          ) : (
-            <div className="py-12 text-center border border-rule rounded-md bg-paper-raised">
-              <p className="font-mono text-sm text-ink-muted">
-                No posts yet — the first one is always the hardest.
-              </p>
-            </div>
-          )}
-          <div className="mt-8">
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-indigo hover:text-[--color-indigo-hover] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded group"
-            >
-              Read the blog
               <ArrowRight
                 size={14}
                 aria-hidden="true"
