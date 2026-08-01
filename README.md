@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ⚡ ACM MEC — Official Website
 
 ![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)
@@ -193,3 +194,6 @@ We welcome pull requests from community members and student developers! Please r
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+=======
+# Website
+>>>>>>> 6eb1bde19c9a910f7c04ae4c5f2a2e2a16d0b9cf
