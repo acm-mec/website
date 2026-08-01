@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import {
   Lock,
@@ -13,9 +13,9 @@ import {
   Calendar,
   Settings,
   Users,
-  Key,
   X,
   ExternalLink,
+  ShieldAlert,
 } from "lucide-react";
 import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
@@ -24,13 +24,24 @@ import Card from "../components/ui/Card";
 import Badge from "../components/ui/Badge";
 import StatusMeta from "../components/ui/StatusMeta";
 
+const SESSION_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes inactivity auto-logout
+
+function safeExternalUrl(value) {
+  const trimmedValue = value?.trim();
+  if (!trimmedValue) return null;
+  try {
+    const url = new URL(trimmedValue);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function Admin() {
   const {
     siteConfig,
     events,
     team,
-    adminPasscode,
-    setAdminPasscode,
     addEvent,
     updateEvent,
     deleteEvent,
@@ -41,16 +52,22 @@ export default function Admin() {
     resetToDefaults,
   } = useData();
 
-  // Authentication state
+  // Authentication & Security state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passInput, setPassInput] = useState("");
-  const [authError, setAuthError] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  // Session activity timer ref
+  const lastActivityRef = useRef(Date.now());
 
   // Active tab: "events" | "config" | "team" | "export"
   const [activeTab, setActiveTab] = useState("events");
 
-  // Event modal state
-  const [editingEvent, setEditingEvent] = useState(null); // null = modal closed, {} = new event, {id...} = editing
+  // Modals & Form States
+  const [editingEvent, setEditingEvent] = useState(null);
   const [eventForm, setEventForm] = useState({
     id: "",
     title: "",
@@ -64,7 +81,6 @@ export default function Admin() {
     registrationLink: "",
   });
 
-  // Team member modal state
   const [editingMember, setEditingMember] = useState(null);
   const [memberForm, setMemberForm] = useState({
     id: "",
@@ -76,34 +92,114 @@ export default function Admin() {
     linkedin: "",
   });
 
-  // Site Config Form state
   const [configForm, setConfigForm] = useState({ ...siteConfig });
   const [configSaved, setConfigSaved] = useState(false);
 
-  // Passcode change state
-  const [newPasscode, setNewPasscode] = useState("");
-  const [passcodeSuccess, setPasscodeSuccess] = useState(false);
+  const [formError, setFormError] = useState("");
 
   // Copy/export feedback
   const [copiedCode, setCopiedCode] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+    const checkSession = async () => {
+      try {
+        const response = await fetch("/api/auth", { credentials: "same-origin" });
+        const result = await response.json();
+        if (isMounted) setIsAuthenticated(response.ok && result.authenticated === true);
+      } catch {
+        if (isMounted) setAuthError("Admin authentication service is unavailable.");
+      } finally {
+        if (isMounted) setIsCheckingSession(false);
+      }
+    };
+    checkSession();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Inactivity Auto-Logout Timer (15 minutes)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const updateActivity = () => {
+      lastActivityRef.current = Date.now();
+    };
+
+    window.addEventListener("mousemove", updateActivity);
+    window.addEventListener("keydown", updateActivity);
+    window.addEventListener("click", updateActivity);
+
+    const checkInactivity = setInterval(() => {
+      if (Date.now() - lastActivityRef.current >= SESSION_TIMEOUT_MS) {
+        fetch("/api/auth", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "logout" }),
+        }).catch(() => {});
+        setIsAuthenticated(false);
+        setAuthError("Session expired due to 15 minutes of inactivity.");
+      }
+    }, 10000);
+
+    return () => {
+      window.removeEventListener("mousemove", updateActivity);
+      window.removeEventListener("keydown", updateActivity);
+      window.removeEventListener("click", updateActivity);
+      clearInterval(checkInactivity);
+    };
+  }, [isAuthenticated]);
+
+  useEffect(() => {
     setConfigForm({ ...siteConfig });
   }, [siteConfig]);
 
-  const handleLogin = (e) => {
+  // ── Login Handler with Salted Hash + Rate Limiting ──
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (passInput === adminPasscode) {
-      setIsAuthenticated(true);
-      setAuthError(false);
+    if (isVerifying || !passInput) return;
+
+    setIsVerifying(true);
+    setAuthError("");
+
+    try {
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "login", password: passInput }),
+      });
+      const result = await response.json();
       setPassInput("");
-    } else {
-      setAuthError(true);
+
+      if (response.ok && result.authenticated === true) {
+        setIsAuthenticated(true);
+        setAuthError("");
+        lastActivityRef.current = Date.now();
+      } else {
+        setAuthError(result.error || "Authentication failed.");
+      }
+    } catch {
+      setAuthError("Admin authentication service is unavailable.");
+    } finally {
+      setIsVerifying(false);
     }
   };
 
-  const handleLock = () => {
-    setIsAuthenticated(false);
+  const handleLock = async () => {
+    try {
+      await fetch("/api/auth", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "logout" }),
+      });
+    } finally {
+      setIsAuthenticated(false);
+      setPassInput("");
+    }
   };
 
   // ── Event Modal Handlers ──
@@ -135,6 +231,11 @@ export default function Admin() {
 
   const handleSaveEvent = (e) => {
     e.preventDefault();
+    const registrationLink = safeExternalUrl(eventForm.registrationLink);
+    if (eventForm.registrationLink.trim() && !registrationLink) {
+      setFormError("Registration links must use http:// or https://.");
+      return;
+    }
     const formattedTags = eventForm.tags
       .split(",")
       .map((t) => t.trim())
@@ -143,7 +244,7 @@ export default function Admin() {
     const eventPayload = {
       ...eventForm,
       tags: formattedTags,
-      registrationLink: eventForm.registrationLink.trim() || null,
+      registrationLink,
     };
 
     if (editingEvent.isNew) {
@@ -152,6 +253,7 @@ export default function Admin() {
       updateEvent(editingEvent.id, eventPayload);
     }
 
+    setFormError("");
     setEditingEvent(null);
   };
 
@@ -191,6 +293,12 @@ export default function Admin() {
 
   const handleSaveMember = (e) => {
     e.preventDefault();
+    const github = safeExternalUrl(memberForm.github);
+    const linkedin = safeExternalUrl(memberForm.linkedin);
+    if ((memberForm.github.trim() && !github) || (memberForm.linkedin.trim() && !linkedin)) {
+      setFormError("Social profile links must use http:// or https://.");
+      return;
+    }
     const memberPayload = {
       id: memberForm.id,
       name: memberForm.name,
@@ -198,8 +306,8 @@ export default function Admin() {
       year: memberForm.year,
       bio: memberForm.bio,
       socials: {
-        github: memberForm.github.trim() || "https://github.com/placeholder",
-        linkedin: memberForm.linkedin.trim() || "https://linkedin.com/in/placeholder",
+        github: github || "https://github.com/placeholder",
+        linkedin: linkedin || "https://linkedin.com/in/placeholder",
       },
     };
 
@@ -209,6 +317,7 @@ export default function Admin() {
       updateTeamMember(editingMember.id, memberPayload);
     }
 
+    setFormError("");
     setEditingMember(null);
   };
 
@@ -221,22 +330,20 @@ export default function Admin() {
   // ── Site Config Handler ──
   const handleSaveConfig = (e) => {
     e.preventDefault();
-    updateSiteConfig(configForm);
+    const socials = Object.fromEntries(
+      Object.entries(configForm.socials || {}).map(([name, value]) => [name, safeExternalUrl(value)]),
+    );
+    if (Object.entries(configForm.socials || {}).some(([, value]) => value?.trim() && !safeExternalUrl(value))) {
+      setFormError("Social links must use http:// or https://.");
+      return;
+    }
+    updateSiteConfig({ ...configForm, socials });
+    setFormError("");
     setConfigSaved(true);
     setTimeout(() => setConfigSaved(false), 2500);
   };
 
-  // ── Passcode Update ──
-  const handleChangePasscode = (e) => {
-    e.preventDefault();
-    if (newPasscode.trim().length >= 4) {
-      setAdminPasscode(newPasscode.trim());
-      setNewPasscode("");
-      setPasscodeSuccess(true);
-      setTimeout(() => setPasscodeSuccess(false), 2500);
-    }
-  };
-
+  // ── Secure Passcode Change ──
   // ── Export Code Snippet ──
   const getExportCode = () => {
     return `// Copy into src/data/events.js
@@ -269,19 +376,29 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
   };
 
   // ── Password Guard View ──
+  if (isCheckingSession) {
+    return (
+      <section className="py-24 md:py-32">
+        <Container>
+          <p className="text-center font-mono text-sm text-ink-muted">Checking secure session…</p>
+        </Container>
+      </section>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <section className="py-24 md:py-32">
         <Container>
-          <div className="max-w-md mx-auto bg-paper-raised border border-rule rounded-md p-8 shadow-md">
+          <div className="max-w-md mx-auto bg-paper-raised border border-rule rounded-md p-8 shadow-md relative">
             <div className="w-12 h-12 rounded bg-indigo/10 flex items-center justify-center mb-6 mx-auto">
               <Lock size={24} className="text-indigo" aria-hidden="true" />
             </div>
             <h1 className="text-2xl font-display font-bold text-ink text-center mb-2">
-              Admin Access
+              Admin Portal Security
             </h1>
             <p className="text-sm font-body text-ink-muted text-center mb-6">
-              Enter passcode to unlock website content management.
+              Enter admin passcode to authenticate your session.
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -296,28 +413,28 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
                   id="passcode-input"
                   type="password"
                   value={passInput}
+                  disabled={isVerifying}
                   onChange={(e) => setPassInput(e.target.value)}
                   placeholder="••••••••"
                   autoFocus
-                  className="w-full px-4 py-2.5 bg-paper border border-rule rounded font-mono text-ink focus:outline-none focus:ring-2 focus:ring-indigo"
+                  className="w-full px-4 py-2.5 bg-paper border border-rule rounded font-mono text-ink focus:outline-none focus:ring-2 focus:ring-indigo disabled:opacity-50"
                 />
                 {authError && (
-                  <p className="mt-2 text-xs font-mono text-red-500">
-                    Incorrect passcode. (Default: acm2026)
+                  <p className="mt-2 text-xs font-mono text-red-500 flex items-center gap-1">
+                    <ShieldAlert size={12} /> {authError}
                   </p>
                 )}
               </div>
 
-              <Button type="submit" variant="primary" className="w-full">
-                Unlock Dashboard
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={isVerifying}
+                className="w-full"
+              >
+                {isVerifying ? "Authenticating…" : "Authenticate Session"}
               </Button>
             </form>
-
-            <div className="mt-6 pt-4 border-t border-rule text-center">
-              <p className="font-mono text-xs text-ink-muted">
-                Default passcode: <code className="text-indigo font-bold">acm2026</code>
-              </p>
-            </div>
           </div>
         </Container>
       </section>
@@ -331,10 +448,6 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
         {/* Header bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-rule">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded border border-signal text-signal bg-signal/10 font-mono text-xs uppercase mb-2">
-              <Unlock size={12} aria-hidden="true" />
-              Admin Session Active
-            </div>
             <h1 className="text-3xl md:text-4xl font-display font-bold text-ink">
               Content Management System
             </h1>
@@ -479,167 +592,151 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
           </div>
         )}
 
-        {/* ── TAB 2: SITE CONFIG ── */}
+        {/* ── TAB 2: SITE CONFIG & SECURITY ── */}
         {activeTab === "config" && (
-          <div className="max-w-2xl bg-paper-raised border border-rule rounded-md p-6">
-            <h2 className="text-xl font-display font-semibold text-ink mb-4">
-              Edit Site Configuration
-            </h2>
+          <div className="space-y-8 max-w-2xl">
+            <div className="bg-paper-raised border border-rule rounded-md p-6">
+              <h2 className="text-xl font-display font-semibold text-ink mb-4">
+                Edit Site Configuration
+              </h2>
 
-            <form onSubmit={handleSaveConfig} className="space-y-4">
-              <div>
-                <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                  Club Name
-                </label>
-                <input
-                  type="text"
-                  value={configForm.clubName || ""}
-                  onChange={(e) => setConfigForm({ ...configForm, clubName: e.target.value })}
-                  className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                />
-              </div>
-
-              <div>
-                <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                  Tagline
-                </label>
-                <input
-                  type="text"
-                  value={configForm.tagline || ""}
-                  onChange={(e) => setConfigForm({ ...configForm, tagline: e.target.value })}
-                  className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                />
-              </div>
-
-              <div>
-                <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                  Contact Email
-                </label>
-                <input
-                  type="email"
-                  value={configForm.email || ""}
-                  onChange={(e) => setConfigForm({ ...configForm, email: e.target.value })}
-                  className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                />
-              </div>
-
-              <div>
-                <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                  Description
-                </label>
-                <textarea
-                  rows={3}
-                  value={configForm.description || ""}
-                  onChange={(e) => setConfigForm({ ...configForm, description: e.target.value })}
-                  className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                    GitHub URL
-                  </label>
-                  <input
-                    type="text"
-                    value={configForm.socials?.github || ""}
-                    onChange={(e) =>
-                      setConfigForm({
-                        ...configForm,
-                        socials: { ...configForm.socials, github: e.target.value },
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                    Instagram URL
-                  </label>
-                  <input
-                    type="text"
-                    value={configForm.socials?.instagram || ""}
-                    onChange={(e) =>
-                      setConfigForm({
-                        ...configForm,
-                        socials: { ...configForm.socials, instagram: e.target.value },
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                    LinkedIn URL
-                  </label>
-                  <input
-                    type="text"
-                    value={configForm.socials?.linkedin || ""}
-                    onChange={(e) =>
-                      setConfigForm({
-                        ...configForm,
-                        socials: { ...configForm.socials, linkedin: e.target.value },
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                    Discord Invite URL
-                  </label>
-                  <input
-                    type="text"
-                    value={configForm.socials?.discord || ""}
-                    onChange={(e) =>
-                      setConfigForm({
-                        ...configForm,
-                        socials: { ...configForm.socials, discord: e.target.value },
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-2 flex items-center gap-3">
-                <Button type="submit" variant="primary" className="gap-2">
-                  <Save size={16} /> Save Configuration
-                </Button>
-                {configSaved && (
-                  <span className="font-mono text-xs text-signal flex items-center gap-1">
-                    <Check size={14} /> Saved live!
-                  </span>
+              <form onSubmit={handleSaveConfig} className="space-y-4">
+                {formError && (
+                  <p className="font-mono text-xs text-red-500 flex items-center gap-1">
+                    <ShieldAlert size={14} /> {formError}
+                  </p>
                 )}
-              </div>
-            </form>
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    Club Name
+                  </label>
+                  <input
+                    type="text"
+                    value={configForm.clubName || ""}
+                    onChange={(e) => setConfigForm({ ...configForm, clubName: e.target.value })}
+                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                  />
+                </div>
 
-            <hr className="my-8 border-rule" />
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    Tagline
+                  </label>
+                  <input
+                    type="text"
+                    value={configForm.tagline || ""}
+                    onChange={(e) => setConfigForm({ ...configForm, tagline: e.target.value })}
+                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                  />
+                </div>
 
-            {/* Passcode update */}
-            <form onSubmit={handleChangePasscode} className="space-y-3">
-              <h3 className="text-sm font-display font-semibold text-ink flex items-center gap-2">
-                <Key size={16} /> Change Admin Passcode
-              </h3>
-              <div className="flex gap-2">
-                <input
-                  type="password"
-                  value={newPasscode}
-                  onChange={(e) => setNewPasscode(e.target.value)}
-                  placeholder="New Passcode (min 4 chars)"
-                  className="px-3 py-2 bg-paper border border-rule rounded font-mono text-ink flex-1"
-                />
-                <Button type="submit" variant="secondary">
-                  Update
-                </Button>
-              </div>
-              {passcodeSuccess && (
-                <p className="font-mono text-xs text-signal">Passcode updated successfully!</p>
-              )}
-            </form>
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    Contact Email
+                  </label>
+                  <input
+                    type="email"
+                    value={configForm.email || ""}
+                    onChange={(e) => setConfigForm({ ...configForm, email: e.target.value })}
+                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={configForm.description || ""}
+                    onChange={(e) => setConfigForm({ ...configForm, description: e.target.value })}
+                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      GitHub URL
+                    </label>
+                    <input
+                      type="text"
+                      value={configForm.socials?.github || ""}
+                      onChange={(e) =>
+                        setConfigForm({
+                          ...configForm,
+                          socials: { ...configForm.socials, github: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      Instagram URL
+                    </label>
+                    <input
+                      type="text"
+                      value={configForm.socials?.instagram || ""}
+                      onChange={(e) =>
+                        setConfigForm({
+                          ...configForm,
+                          socials: { ...configForm.socials, instagram: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      LinkedIn URL
+                    </label>
+                    <input
+                      type="text"
+                      value={configForm.socials?.linkedin || ""}
+                      onChange={(e) =>
+                        setConfigForm({
+                          ...configForm,
+                          socials: { ...configForm.socials, linkedin: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      Discord Invite URL
+                    </label>
+                    <input
+                      type="text"
+                      value={configForm.socials?.discord || ""}
+                      onChange={(e) =>
+                        setConfigForm({
+                          ...configForm,
+                          socials: { ...configForm.socials, discord: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center gap-3">
+                  <Button type="submit" variant="primary" className="gap-2">
+                    <Save size={16} /> Save Configuration
+                  </Button>
+                  {configSaved && (
+                    <span className="font-mono text-xs text-signal flex items-center gap-1">
+                      <Check size={14} /> Saved live!
+                    </span>
+                  )}
+                </div>
+              </form>
+            </div>
+
           </div>
         )}
 
@@ -737,6 +834,11 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
               </div>
 
               <form onSubmit={handleSaveEvent} className="space-y-4">
+                {formError && (
+                  <p className="font-mono text-xs text-red-500 flex items-center gap-1">
+                    <ShieldAlert size={14} /> {formError}
+                  </p>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
@@ -899,6 +1001,11 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
               </div>
 
               <form onSubmit={handleSaveMember} className="space-y-4">
+                {formError && (
+                  <p className="font-mono text-xs text-red-500 flex items-center gap-1">
+                    <ShieldAlert size={14} /> {formError}
+                  </p>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">

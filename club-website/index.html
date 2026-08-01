@@ -2,20 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Anti-FOUC: read saved theme and apply before first paint -->
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem("acm-theme");
-          if (!t) {
-            t = window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          }
-          document.documentElement.setAttribute("data-theme", t);
-        } catch (e) {}
-      })();
-    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ACM MEC — Code. Build. Ship.</title>

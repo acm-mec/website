@@ -9,7 +9,6 @@ const STORAGE_KEYS = {
   SITE_CONFIG: "acm_site_config_v1",
   EVENTS: "acm_events_v1",
   TEAM: "acm_team_v1",
-  PASSCODE: "acm_admin_passcode_v1",
 };
 
 function getStoredOrDefault(key, defaultValue) {
@@ -32,13 +31,6 @@ export function DataProvider({ children }) {
   const [team, setTeam] = useState(() =>
     getStoredOrDefault(STORAGE_KEYS.TEAM, initialTeam)
   );
-  const [adminPasscode, setAdminPasscode] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEYS.PASSCODE) || "acm2026";
-    } catch {
-      return "acm2026";
-    }
-  });
 
   // Sync state to localStorage on changes
   useEffect(() => {
@@ -64,14 +56,6 @@ export function DataProvider({ children }) {
       console.error("Failed to save team to localStorage:", e);
     }
   }, [team]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.PASSCODE, adminPasscode);
-    } catch (e) {
-      console.error("Failed to save passcode to localStorage:", e);
-    }
-  }, [adminPasscode]);
 
   // ── Events CRUD ──
   const addEvent = (newEvent) => {
@@ -128,8 +112,6 @@ export function DataProvider({ children }) {
         siteConfig,
         events,
         team,
-        adminPasscode,
-        setAdminPasscode,
         addEvent,
         updateEvent,
         deleteEvent,

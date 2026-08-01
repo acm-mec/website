@@ -65,3 +65,17 @@ The site design system is driven by CSS-first Tailwind CSS v4 variables in `src/
 ```
 
 For project-wide documentation, architecture details, and contribution guidelines, see the root repository documentation in [`../README.md`](../README.md) and [`../PROJECT_BRIEF.MD`](../PROJECT_BRIEF.MD).
+
+## Admin security setup
+
+The admin password is verified only by the serverless `/api/auth` endpoint. It is never put in the Vite bundle or browser storage. Before using the admin panel, generate a hash and session-signing key, then paste the two output lines into the ignored `.env` file:
+
+```bash
+node scripts/gen_pass.mjs "your admin password"
+```
+
+During local development, `npm run dev` serves `/api/auth` through a Vite middleware that uses the same server-side handler as deployment.
+
+For Vercel deployments, add the same `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET` values in the project Environment Variables settings. Do not use a `VITE_` prefix for either value: all `VITE_*` variables are public client-side build values. To rotate the password, generate a new pair and update both environment variables.
+
+The API uses scrypt password verification, a 15-minute HttpOnly/Secure/SameSite session cookie, same-origin checks, and login throttling. The in-memory throttling protects a single serverless instance; for distributed, production-grade rate limits, put a shared rate limiter (such as Vercel KV/Upstash) in front of `/api/auth`.
