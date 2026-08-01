@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router";
 import { ArrowLeft, MapPin, Clock, ExternalLink } from "lucide-react";
-import { events } from "../data/events";
+import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import Badge from "../components/ui/Badge";
 import Button from "../components/ui/Button";
@@ -9,6 +9,7 @@ import { formatDate } from "../utils/dates";
 
 export default function EventDetail() {
   const { id } = useParams();
+  const { events } = useData();
   const event = events.find((e) => e.id === id);
 
   if (!event) {

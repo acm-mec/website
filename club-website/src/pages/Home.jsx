@@ -1,38 +1,38 @@
 import { Link } from "react-router";
 import { ArrowRight, Users, Calendar, Clock3 } from "lucide-react";
-import { siteConfig } from "../data/siteConfig";
-import { events } from "../data/events";
-import { team } from "../data/team";
+import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
 import SectionHeading from "../components/ui/SectionHeading";
 import TypingHeadline from "../components/ui/TypingHeadline";
 import EventCard from "../components/shared/EventCard";
 
-const upcomingEvents = events
-  .filter((e) => e.status === "upcoming")
-  .sort((a, b) => new Date(a.date) - new Date(b.date))
-  .slice(0, 3);
-
-const stats = [
-  {
-    icon: Users,
-    value: team.length + "+",
-    label: "Active Members",
-  },
-  {
-    icon: Calendar,
-    value: events.length + "+",
-    label: "Events Hosted",
-  },
-  {
-    icon: Clock3,
-    value: `Est. ${siteConfig.foundingYear}`,
-    label: "Years Running",
-  },
-];
-
 export default function Home() {
+  const { siteConfig, events, team } = useData();
+
+  const upcomingEvents = events
+    .filter((e) => e.status === "upcoming")
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 3);
+
+  const stats = [
+    {
+      icon: Users,
+      value: team.length + "+",
+      label: "Active Members",
+    },
+    {
+      icon: Calendar,
+      value: events.length + "+",
+      label: "Events Hosted",
+    },
+    {
+      icon: Clock3,
+      value: `Est. ${siteConfig.foundingYear}`,
+      label: "Years Running",
+    },
+  ];
+
   return (
     <>
       {/* ── Hero ── */}
@@ -89,7 +89,7 @@ export default function Home() {
             {stats.map(({ icon: Icon, value, label }) => (
               <div
                 key={label}
-                className="flex items-center gap-4 p-4 rounded-md border border-rule"
+                className="flex items-center gap-4 p-4 rounded-md border border-rule hover:border-indigo transition-colors duration-150"
               >
                 <div className="w-10 h-10 rounded bg-indigo/10 flex items-center justify-center flex-shrink-0">
                   <Icon size={20} className="text-indigo" aria-hidden="true" />

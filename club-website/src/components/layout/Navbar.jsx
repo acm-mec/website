@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { Menu, X } from "lucide-react";
-import { siteConfig } from "../../data/siteConfig";
+import { useData } from "../../context/DataContext";
 import Button from "../ui/Button";
 import ThemeToggle from "../ui/ThemeToggle";
 
@@ -14,16 +14,22 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { siteConfig } = useData();
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Close mobile menu on Escape key
+  // Keyboard shortcut listener: Ctrl+Shift+A to navigate to hidden admin
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "Escape" && open) setOpen(false);
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "A" || e.key === "a")) {
+        e.preventDefault();
+        navigate("/admin");
+      }
     };
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [open]);
+  }, [open, navigate]);
 
   const linkClass = ({ isActive }) =>
     `font-body text-sm font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded ${

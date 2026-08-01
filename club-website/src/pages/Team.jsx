@@ -1,8 +1,10 @@
-import { team } from "../data/team";
+import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import TeamMemberCard from "../components/shared/TeamMemberCard";
 
 export default function Team() {
+  const { team } = useData();
+
   return (
     <section className="py-16 md:py-24">
       <Container>

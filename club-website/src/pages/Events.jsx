@@ -1,11 +1,12 @@
 import { useState, useRef, useCallback } from "react";
-import { events } from "../data/events";
+import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import EventCard from "../components/shared/EventCard";
 
 const TABS = ["upcoming", "past"];
 
 export default function Events() {
+  const { events } = useData();
   const [activeTab, setActiveTab] = useState("upcoming");
   const tabRefs = useRef([]);
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { siteConfig } from "../data/siteConfig";
+import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import { Mail, Copy, Check } from "lucide-react";
 import {
@@ -9,35 +9,36 @@ import {
   DiscordIcon,
 } from "../components/ui/SocialIcons";
 
-const socialLinks = [
-  {
-    key: "github",
-    Icon: GitHubIcon,
-    label: "GitHub",
-    handle: "@" + siteConfig.socials.github.split("/").pop(),
-  },
-  {
-    key: "instagram",
-    Icon: InstagramIcon,
-    label: "Instagram",
-    handle: "@" + siteConfig.socials.instagram.split("/").pop(),
-  },
-  {
-    key: "linkedin",
-    Icon: LinkedInIcon,
-    label: "LinkedIn",
-    handle: siteConfig.clubName + " on LinkedIn",
-  },
-  {
-    key: "discord",
-    Icon: DiscordIcon,
-    label: "Discord",
-    handle: "Join our server",
-  },
-];
-
 export default function Contact() {
+  const { siteConfig } = useData();
   const [copied, setCopied] = useState(false);
+
+  const socialLinks = [
+    {
+      key: "github",
+      Icon: GitHubIcon,
+      label: "GitHub",
+      handle: "@" + (siteConfig.socials?.github?.split("/").pop() || "acm-mec"),
+    },
+    {
+      key: "instagram",
+      Icon: InstagramIcon,
+      label: "Instagram",
+      handle: "@" + (siteConfig.socials?.instagram?.split("/").pop() || "acm_mec"),
+    },
+    {
+      key: "linkedin",
+      Icon: LinkedInIcon,
+      label: "LinkedIn",
+      handle: siteConfig.clubName + " on LinkedIn",
+    },
+    {
+      key: "discord",
+      Icon: DiscordIcon,
+      label: "Discord",
+      handle: "Join our server",
+    },
+  ];
 
   const handleCopy = async () => {
     try {
@@ -45,7 +46,6 @@ export default function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback: select + copy for non-secure contexts
       const el = document.createElement("textarea");
       el.value = siteConfig.email;
       document.body.appendChild(el);
@@ -120,7 +120,7 @@ export default function Contact() {
               {socialLinks.map(({ key, Icon, label, handle }) => (
                 <li key={key}>
                   <a
-                    href={siteConfig.socials[key]}
+                    href={siteConfig.socials?.[key] || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${siteConfig.clubName} on ${label}`}

@@ -1,5 +1,5 @@
 import { Code2, Zap, GitBranch, Users, CheckCircle2 } from "lucide-react";
-import { siteConfig } from "../data/siteConfig";
+import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
 
@@ -38,6 +38,8 @@ const benefits = [
 ];
 
 export default function About() {
+  const { siteConfig } = useData();
+
   return (
     <>
       {/* ── Page header ── */}
@@ -74,7 +76,7 @@ export default function About() {
             {activities.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="bg-paper border border-rule rounded-md p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-150"
+                className="bg-paper border border-rule rounded-md p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-indigo transition-all duration-150"
               >
                 <div className="w-10 h-10 rounded bg-indigo/10 flex items-center justify-center mb-4">
                   <Icon size={20} className="text-indigo" aria-hidden="true" />

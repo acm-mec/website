@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { siteConfig } from "../../data/siteConfig";
+import { useData } from "../../context/DataContext";
 import {
   GitHubIcon,
   InstagramIcon,
@@ -23,6 +23,8 @@ const socialIcons = [
 ];
 
 export default function Footer() {
+  const { siteConfig } = useData();
+
   return (
     <footer className="border-t border-rule bg-paper mt-auto">
       <div className="max-w-6xl mx-auto px-6 md:px-8 py-12">
@@ -68,7 +70,7 @@ export default function Footer() {
               {socialIcons.map(({ key, Icon, label }) => (
                 <a
                   key={key}
-                  href={siteConfig.socials[key]}
+                  href={siteConfig.socials?.[key] || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
@@ -90,11 +92,18 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-rule">
+        <div className="mt-10 pt-6 border-t border-rule flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-mono text-sm text-ink-muted">
             © {new Date().getFullYear()} {siteConfig.clubName}. Built by club
             members.
           </p>
+          <Link
+            to="/admin"
+            className="font-mono text-xs text-ink-muted/50 hover:text-indigo transition-colors"
+            title="Admin Portal (Ctrl+Shift+A)"
+          >
+            [Admin]
+          </Link>
         </div>
       </div>
     </footer>
