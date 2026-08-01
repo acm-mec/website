@@ -42,9 +42,12 @@ export default function Navbar() {
         {/* Logo / Club name */}
         <Link
           to="/"
-          className="font-display font-semibold text-lg text-ink hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded"
+          className="flex items-center gap-2.5 font-display font-semibold text-lg text-ink hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded group"
         >
-          {siteConfig.clubName}
+          <span className="w-8 h-8 rounded bg-indigo/10 border border-indigo/20 flex items-center justify-center font-mono text-xs font-bold text-indigo group-hover:bg-indigo group-hover:text-paper transition-all duration-150">
+            &gt;_
+          </span>
+          <span>{siteConfig.clubName}</span>
         </Link>
 
         {/* Desktop nav */}

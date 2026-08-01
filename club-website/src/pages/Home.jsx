@@ -43,12 +43,34 @@ export default function Home() {
   return (
     <>
       {/* ── Hero ── */}
-      <section className="py-20 md:py-32 bg-paper border-b border-rule">
-        <Container>
+      <section className="relative py-20 md:py-32 bg-paper border-b border-rule overflow-hidden">
+        {/* Subtle grid pattern background */}
+        <svg
+          className="absolute inset-0 w-full h-full opacity-25 dark:opacity-15 pointer-events-none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <pattern id="hero-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-rule" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-grid)" />
+        </svg>
+
+        {/* Ambient radial glow */}
+        <div
+          aria-hidden="true"
+          className="absolute -top-24 -left-24 w-96 h-96 bg-indigo/10 dark:bg-indigo/20 blur-3xl rounded-full pointer-events-none"
+        />
+
+        <Container className="relative z-10">
           <div className="max-w-3xl">
-            <p className="font-mono text-sm text-ink-muted uppercase tracking-widest mb-4">
-              {siteConfig.clubName} / {new Date().getFullYear()}
-            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-paper-raised border border-rule mb-6 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
+              <span className="font-mono text-xs text-ink-muted uppercase tracking-wider">
+                {siteConfig.clubName} · Model Engineering College
+              </span>
+            </div>
             <h1 className="text-5xl md:text-7xl font-display font-bold text-ink tracking-tight leading-[1.08] mb-4">
               <TypingHeadline text={siteConfig.tagline} speed={60} />
             </h1>
@@ -197,19 +219,20 @@ export default function Home() {
       </section>
 
       {/* ── CTA banner ── */}
-      <section className="py-16 md:py-24 bg-indigo">
+      <section className="py-16 md:py-24 bg-indigo text-white dark:text-[#070D17]">
         <Container>
           <div className="text-center max-w-xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-display font-semibold text-paper tracking-tight mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4">
               Ready to build with us?
             </h2>
-            <p className="text-base font-body text-paper/80 leading-relaxed mb-8">
+            <p className="text-base font-body opacity-90 leading-relaxed mb-8">
               Join a community that ships things. We'd love to have you.
             </p>
             <Button
               as={Link}
               to="/contact"
-              className="bg-paper-raised text-ink hover:bg-paper"
+              variant="secondary"
+              className="!bg-white !text-[#16181D] hover:!bg-gray-100 dark:!bg-[#070D17] dark:!text-white dark:hover:!bg-[#121E30] dark:!border-[#070D17] font-semibold border-none shadow-md"
             >
               Get in Touch
             </Button>

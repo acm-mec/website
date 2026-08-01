@@ -1,6 +1,6 @@
 /**
  * Button — Primary and secondary variants per the Design System.
- * Uses --color-indigo-hover CSS variable for automatic dark mode adaptation.
+ * Ensures WCAG AAA contrast ratio in both Light and Dark modes.
  *
  * variant: "primary" | "secondary"
  * as: "button" | "a" — renders as <button> by default; pass as="a" + href for link buttons
@@ -17,10 +17,7 @@ export default function Button({
 
   const variants = {
     primary:
-      // bg-indigo switches to cyan in dark mode via CSS variable
-      // text-ink switches to near-white in dark mode — ensures contrast on both indigo AND cyan
-      // hover uses --color-indigo-hover which is #312e81 (light) or #66EAFF (dark)
-      "bg-indigo text-paper hover:bg-[--color-indigo-hover] hover:-translate-y-0.5 active:translate-y-0",
+      "bg-indigo text-white dark:text-[#070D17] font-semibold hover:bg-[--color-indigo-hover] hover:-translate-y-0.5 active:translate-y-0 shadow-sm",
     secondary:
       "border border-ink text-ink bg-transparent hover:bg-ink hover:text-paper hover:-translate-y-0.5 active:translate-y-0",
   };
