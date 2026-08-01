@@ -1,0 +1,53 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ── Dark mode variant: triggered by [data-theme="dark"] on <html> ── */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  /* ── Light mode color tokens (Terminal Notebook) ── */
+  --color-paper: #FAFAF8;
+  --color-paper-raised: #FFFFFF;
+  --color-ink: #16181D;
+  --color-ink-muted: #52565E;
+  --color-indigo: #3730A3;
+  --color-indigo-hover: #312e81;
+  --color-signal: #15803D;
+  --color-amber: #2DB7E5;
+  --color-rule: #E4E4E7;
+
+  /* ── Typography ── */
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* ── Dark mode token overrides (Cyber-Metallic, from club logo palette) ── */
+[data-theme="dark"] {
+  --color-paper: #070D17;
+  --color-paper-raised: #0f1d2e;
+  --color-ink: #F1F5F9;
+  --color-ink-muted: #C2C9D1;
+  --color-indigo: #2DB7E5;
+  --color-indigo-hover: #66EAFF;
+  --color-signal: #4ade80;
+  --color-amber: #66EAFF;
+  --color-rule: #1a3050;
+}
+
+/* ── Base ── */
+html {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: "IBM Plex Sans", sans-serif;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
