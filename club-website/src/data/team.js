@@ -8,7 +8,8 @@ export const team = [
     "socials": {
       "github": "https://github.com/placeholder",
       "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    },
+    "image": "https://i.ibb.co/LTc6MK1/Starry-purple-magenta-nebula-sky-202607261132.jpg"
   },
   {
     "id": "vice-president",
