@@ -47,7 +47,10 @@ npm run preview    # Preview production build locally
 
 ## Deployment
 Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.json` rewrite rule for deep routes.
+- **Root Directory:** `club-website` (if repo root is deployed on Vercel)
+- **Framework Preset:** Vite
+- **Output Directory:** `dist` (configured in `club-website/vercel.json` and Vite defaults)
 
 ## Status
 - **Last Updated:** 2026-08-02
-- **Status:** Time picker contrast fixed & single markdown file integrated. Fully functional static SPA.
+- **Status:** Added Vercel `outputDirectory: "dist"` configuration and documented root directory settings.

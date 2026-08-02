@@ -50,7 +50,9 @@ The admin panel uses a serverless `/api/auth` endpoint. Password verification an
 
 ## Deployment
 Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewrite rules for deep routes and the `/api/auth` serverless function.
+- **Framework Preset:** Vite
+- **Output Directory:** `dist`
 
 ## Status
-- Last updated: 2026-08-01
-- Status: Functional React SPA with protected admin preview editing
+- Last updated: 2026-08-02
+- Status: Functional React SPA with outputDirectory configured in vercel.json
