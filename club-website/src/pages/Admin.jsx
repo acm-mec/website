@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import {
   Lock,
-  Unlock,
   Plus,
   Edit2,
   Trash2,
@@ -16,6 +15,8 @@ import {
   X,
   ExternalLink,
   ShieldAlert,
+  Info,
+  Copy,
 } from "lucide-react";
 import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
@@ -49,7 +50,7 @@ export default function Admin() {
     updateTeamMember,
     deleteTeamMember,
     updateSiteConfig,
-    resetToDefaults,
+    reloadSourceData,
   } = useData();
 
   // Authentication & Security state
@@ -94,11 +95,12 @@ export default function Admin() {
 
   const [configForm, setConfigForm] = useState({ ...siteConfig });
   const [configSaved, setConfigSaved] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const [formError, setFormError] = useState("");
 
   // Copy/export feedback
-  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedSection, setCopiedSection] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -330,6 +332,11 @@ export default function Admin() {
   // ── Site Config Handler ──
   const handleSaveConfig = (e) => {
     e.preventDefault();
+    const foundingYear = Number(configForm.foundingYear);
+    if (!Number.isInteger(foundingYear) || foundingYear < 1900 || foundingYear > 2100) {
+      setFormError("Founding year must be a valid year.");
+      return;
+    }
     const socials = Object.fromEntries(
       Object.entries(configForm.socials || {}).map(([name, value]) => [name, safeExternalUrl(value)]),
     );
@@ -337,29 +344,37 @@ export default function Admin() {
       setFormError("Social links must use http:// or https://.");
       return;
     }
-    updateSiteConfig({ ...configForm, socials });
+    updateSiteConfig({ ...configForm, foundingYear, socials });
     setFormError("");
     setConfigSaved(true);
+    setShowPreviewModal(true);
     setTimeout(() => setConfigSaved(false), 2500);
   };
 
   // ── Secure Passcode Change ──
-  // ── Export Code Snippet ──
-  const getExportCode = () => {
-    return `// Copy into src/data/events.js
-export const events = ${JSON.stringify(events, null, 2)};
+  // ── Export Code Snippets (per file) ──
+  const exportSections = [
+    {
+      key: "siteConfig",
+      file: "src/data/siteConfig.js",
+      getCode: () => `export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`,
+    },
+    {
+      key: "events",
+      file: "src/data/events.js",
+      getCode: () => `export const events = ${JSON.stringify(events, null, 2)};`,
+    },
+    {
+      key: "team",
+      file: "src/data/team.js",
+      getCode: () => `export const team = ${JSON.stringify(team, null, 2)};`,
+    },
+  ];
 
-// Copy into src/data/team.js
-export const team = ${JSON.stringify(team, null, 2)};
-
-// Copy into src/data/siteConfig.js
-export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
-  };
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(getExportCode());
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+  const copySection = (key, text) => {
+    navigator.clipboard.writeText(text);
+    setCopiedSection(key);
+    setTimeout(() => setCopiedSection(null), 2000);
   };
 
   const handleDownloadJSON = () => {
@@ -456,15 +471,15 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
-                if (window.confirm("Reset all events, team, and config to initial factory defaults?")) {
-                  resetToDefaults();
+                if (window.confirm("Discard browser edits and reload the current src/data files?")) {
+                  reloadSourceData();
                 }
               }}
-              title="Reset data to static defaults"
+              title="Reload content from src/data"
               className="inline-flex items-center gap-1.5 px-3 py-2 border border-rule text-ink-muted hover:text-red-500 rounded font-mono text-xs transition-colors"
             >
               <RotateCcw size={14} />
-              Reset Defaults
+              Reload Source Data
             </button>
             <Button variant="secondary" onClick={handleLock} className="gap-2">
               <Lock size={14} />
@@ -644,6 +659,20 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
 
                 <div>
                   <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    Founding Year
+                  </label>
+                  <input
+                    type="number"
+                    min="1900"
+                    max="2100"
+                    value={configForm.foundingYear || ""}
+                    onChange={(e) => setConfigForm({ ...configForm, foundingYear: e.target.value })}
+                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
                     Description
                   </label>
                   <textarea
@@ -803,16 +832,29 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
               <Button onClick={handleDownloadJSON} variant="primary" className="gap-2">
                 <Download size={16} /> Download JSON Backup
               </Button>
-              <Button onClick={handleCopyCode} variant="secondary" className="gap-2">
-                {copiedCode ? <Check size={16} className="text-signal" /> : <Save size={16} />}
-                {copiedCode ? "Copied to Clipboard!" : "Copy Code Snippet"}
-              </Button>
             </div>
 
-            <div className="relative">
-              <pre className="p-4 bg-paper border border-rule rounded font-mono text-xs text-ink overflow-x-auto max-h-96">
-                <code>{getExportCode()}</code>
-              </pre>
+            <div className="space-y-6">
+              {exportSections.map(({ key, file, getCode }) => {
+                const isCopied = copiedSection === key;
+                return (
+                  <div key={key} className="bg-paper border border-rule rounded-md p-4">
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <p className="font-mono text-xs text-indigo font-bold">{file}</p>
+                      <button
+                        onClick={() => copySection(key, getCode())}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-rule rounded font-mono text-xs text-ink-muted hover:text-indigo transition-colors focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1"
+                      >
+                        {isCopied ? <Check size={14} className="text-signal" /> : <Save size={14} />}
+                        {isCopied ? "Copied!" : "Copy"}
+                      </button>
+                    </div>
+                    <pre className="p-4 bg-paper-raised border border-rule rounded font-mono text-xs text-ink overflow-x-auto max-h-72">
+                      <code>{getCode()}</code>
+                    </pre>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -1095,6 +1137,69 @@ export const siteConfig = ${JSON.stringify(siteConfig, null, 2)};`;
                   </Button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* ── PREVIEW NOTICE DIALOGUE ── */}
+        {showPreviewModal && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-paper-raised border border-rule rounded-md max-w-lg w-full p-6 shadow-xl relative">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-rule">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded bg-amber/10 text-amber flex items-center justify-center">
+                    <Info size={18} aria-hidden="true" />
+                  </div>
+                  <h3 className="text-xl font-display font-semibold text-ink">
+                    Live Preview Saved
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setShowPreviewModal(false)}
+                  className="p-1 text-ink-muted hover:text-ink rounded"
+                  aria-label="Close dialogue"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="space-y-3 text-sm font-body text-ink-muted leading-relaxed mb-6">
+                <p>
+                  Your configuration changes have been saved to your browser session as a <strong className="text-ink font-semibold">live preview</strong>.
+                </p>
+                <p className="p-3 bg-paper border border-rule rounded text-xs font-mono text-ink leading-normal">
+                  ⚠️ Note: Because this website is a static single-page application, changes in the admin panel do not write back to your local files automatically.
+                </p>
+                <p>
+                  To make your changes permanent across production deploys, please update <code className="px-1.5 py-0.5 bg-paper rounded border border-rule text-indigo font-mono text-xs">src/data/siteConfig.js</code> in your codebase manually.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-end gap-2.5 pt-4 border-t border-rule">
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={() => {
+                    setShowPreviewModal(false);
+                    setActiveTab("export");
+                  }}
+                  className="text-xs gap-1.5"
+                >
+                  <Download size={14} /> Go to Export Tab
+                </Button>
+                <Button
+                  variant="primary"
+                  type="button"
+                  onClick={() => {
+                    const code = `export const siteConfig = ${JSON.stringify(configForm, null, 2)};`;
+                    navigator.clipboard.writeText(code);
+                    setShowPreviewModal(false);
+                  }}
+                  className="text-xs gap-1.5"
+                >
+                  <Copy size={14} /> Copy Code Snippet
+                </Button>
+              </div>
             </div>
           </div>
         )}

@@ -6,12 +6,30 @@ import { team as initialTeam } from "../data/team";
 const DataContext = createContext(null);
 
 const STORAGE_KEYS = {
+  DATA_SIGNATURE: "acm_data_signature_v1",
   SITE_CONFIG: "acm_site_config_v1",
   EVENTS: "acm_events_v1",
   TEAM: "acm_team_v1",
 };
 
-function getStoredOrDefault(key, defaultValue) {
+const sourceDataSignature = JSON.stringify({
+  siteConfig: initialSiteConfig,
+  events: initialEvents,
+  team: initialTeam,
+});
+
+function sourceDataChanged() {
+  try {
+    return localStorage.getItem(STORAGE_KEYS.DATA_SIGNATURE) !== sourceDataSignature;
+  } catch (e) {
+    console.error("Error reading data signature from localStorage:", e);
+    return true;
+  }
+}
+
+function getStoredOrDefault(key, defaultValue, shouldUseDefaults) {
+  if (shouldUseDefaults) return defaultValue;
+
   try {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
@@ -22,19 +40,21 @@ function getStoredOrDefault(key, defaultValue) {
 }
 
 export function DataProvider({ children }) {
+  const [sourceHasChanged] = useState(sourceDataChanged);
   const [siteConfig, setSiteConfig] = useState(() =>
-    getStoredOrDefault(STORAGE_KEYS.SITE_CONFIG, initialSiteConfig)
+    getStoredOrDefault(STORAGE_KEYS.SITE_CONFIG, initialSiteConfig, sourceHasChanged)
   );
   const [events, setEvents] = useState(() =>
-    getStoredOrDefault(STORAGE_KEYS.EVENTS, initialEvents)
+    getStoredOrDefault(STORAGE_KEYS.EVENTS, initialEvents, sourceHasChanged)
   );
   const [team, setTeam] = useState(() =>
-    getStoredOrDefault(STORAGE_KEYS.TEAM, initialTeam)
+    getStoredOrDefault(STORAGE_KEYS.TEAM, initialTeam, sourceHasChanged)
   );
 
-  // Sync state to localStorage on changes
+  // Keep browser edits, but refresh them when the source data files change.
   useEffect(() => {
     try {
+      localStorage.setItem(STORAGE_KEYS.DATA_SIGNATURE, sourceDataSignature);
       localStorage.setItem(STORAGE_KEYS.SITE_CONFIG, JSON.stringify(siteConfig));
     } catch (e) {
       console.error("Failed to save siteConfig to localStorage:", e);
@@ -89,11 +109,17 @@ export function DataProvider({ children }) {
 
   // ── Site Config Update ──
   const updateSiteConfig = (newConfig) => {
-    setSiteConfig((prev) => ({ ...prev, ...newConfig }));
+    setSiteConfig((prev) => ({
+      ...prev,
+      ...newConfig,
+      socials: {
+        ...prev.socials,
+        ...newConfig.socials,
+      },
+    }));
   };
 
-  // ── Reset to Initial Static Data ──
-  const resetToDefaults = () => {
+  const reloadSourceData = () => {
     setSiteConfig(initialSiteConfig);
     setEvents(initialEvents);
     setTeam(initialTeam);
@@ -101,6 +127,7 @@ export function DataProvider({ children }) {
       localStorage.removeItem(STORAGE_KEYS.SITE_CONFIG);
       localStorage.removeItem(STORAGE_KEYS.EVENTS);
       localStorage.removeItem(STORAGE_KEYS.TEAM);
+      localStorage.setItem(STORAGE_KEYS.DATA_SIGNATURE, sourceDataSignature);
     } catch (e) {
       console.error("Error clearing localStorage:", e);
     }
@@ -119,7 +146,7 @@ export function DataProvider({ children }) {
         updateTeamMember,
         deleteTeamMember,
         updateSiteConfig,
-        resetToDefaults,
+        reloadSourceData,
       }}
     >
       {children}

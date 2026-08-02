@@ -1,53 +1,56 @@
-# ACM MEC Website — Project Brief
+# ACM MEC Website - Project Brief
 
 ## What This Is
-A public marketing-and-hub website for the ACM MEC technical/coding club (Model Engineering College Student Chapter). Static React SPA, deployed to Vercel. No backend, no database, no authentication required.
+A public marketing-and-hub website for the ACM MEC technical/coding club (Model Engineering College Student Chapter). It is a React SPA deployed to Vercel, with a protected admin panel for managing the site data in the browser.
 
 ## Tech Stack
-- **Build tool:** Vite 8 (latest)
-- **UI library:** React 19 (JavaScript — no TypeScript)
-- **Styling:** Tailwind CSS v4 (CSS-first config via `@theme` in `src/index.css`)
-- **Routing:** react-router v8 (declarative mode — `BrowserRouter`, `Routes`, `Route`)
-- **Icons:** lucide-react
-- **Markdown:** react-markdown + @tailwindcss/typography (blog posts only)
-- **Linter:** oxlint
-- **Hosting:** Vercel (see `vercel.json` for SPA rewrite rule)
+- Build tool: Vite 8
+- UI library: React 19
+- Styling: Tailwind CSS v4 via `@theme` in `src/index.css`
+- Routing: React Router v8 (`BrowserRouter`, `Routes`, `Route`)
+- Icons: `lucide-react`
+- Markdown: `react-markdown` + `@tailwindcss/typography` for rich text content
+- Linter: `oxlint`
+- Hosting: Vercel with SPA rewrite rules and a serverless admin auth endpoint
 
 ## Core Routes & Pages
 | Route | Component | Description |
 |---|---|---|
-| `/` | `Home.jsx` | Hero section, typing animation, mission statement, featured events & latest posts |
+| `/` | `Home.jsx` | Hero section, stats, event preview, and club summary |
 | `/about` | `About.jsx` | Club history, mission, pillars, and executive board |
-| `/events` | `Events.jsx` | Filterable list of upcoming workshops, hackathons, and past events |
+| `/events` | `Events.jsx` | Filterable list of upcoming and past events |
 | `/events/:id` | `EventDetail.jsx` | Detailed single event page with schedule, location, and RSVP button |
 | `/team` | `Team.jsx` | Executive committee and core team member cards |
-| `/blog` | `Blog.jsx` | Tech articles, workshop write-ups, and student tutorials |
-| `/blog/:id` | `BlogPost.jsx` | Dynamic Markdown article viewer rendered with syntax styling |
-| `/contact` | `Contact.jsx` | Formspree contact form and social link directory |
-| `*` | `NotFound.jsx` | 404 error page with quick redirect home |
+| `/contact` | `Contact.jsx` | Contact details and social link directory |
+| `/admin` | `Admin.jsx` | Protected admin panel for live browser-side content edits |
+| `*` | `NotFound.jsx` | 404 page with quick redirect home |
 
 ## Content Management Architecture
-All club-specific content lives in static configuration files under `club-website/src/data/`:
-- **Site Details:** `src/data/siteConfig.js` — club name, tagline, email, founding year, social links
-- **Events:** `src/data/events.js` — event list, dates, locations, status tags
-- **Team Members:** `src/data/team.js` — member names, roles, avatars, socials
-- **Blog Posts:** `src/data/posts.js` — article metadata and Markdown content strings
+Club-specific content lives in static source files under `club-website/src/data/`:
+- `src/data/siteConfig.js` - club name, tagline, email, founding year, social links
+- `src/data/events.js` - event list, dates, locations, status tags
+- `src/data/team.js` - member names, roles, bios, socials
 
-## Design System ("Terminal Notebook")
-Defined in `DESIGN_SYSTEM.md` and configured via Tailwind v4 CSS `@theme` tokens in `src/index.css`. Supports Light & Dark themes with `ThemeContext`.
+The public site reads through `DataContext`, which initializes from those source files and uses browser `localStorage` for live admin preview. If the source data changes, stale browser data is automatically invalidated.
+
+## Design System
+Defined in `DESIGN_SYSTEM.md` and configured via Tailwind v4 CSS `@theme` tokens in `src/index.css`. Supports light and dark themes with `ThemeContext`.
 
 ## Development Commands
 ```bash
 cd club-website
-npm run dev        # Development server (http://localhost:5173)
-npm run build      # Production build to /dist
-npm run lint       # Run Oxlint static analysis
-npm run preview    # Preview production build locally
+npm run dev
+npm run build
+npm run lint
+npm run preview
 ```
 
+## Admin Security
+The admin panel uses a serverless `/api/auth` endpoint. Password verification and session signing are handled server-side using secrets stored in `.env` locally and in Vercel environment variables in deployment.
+
 ## Deployment
-Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.json` rewrite rule for deep routes.
+Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewrite rules for deep routes and the `/api/auth` serverless function.
 
 ## Status
-- **Last Updated:** 2026-08-02
-- **Status:** Fully functional & verified static SPA.
+- Last updated: 2026-08-01
+- Status: Functional React SPA with protected admin preview editing

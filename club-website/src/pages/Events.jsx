@@ -3,11 +3,11 @@ import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import EventCard from "../components/shared/EventCard";
 
-const TABS = ["upcoming", "past"];
+const TABS = ["all", "upcoming", "past"];
 
 export default function Events() {
   const { events } = useData();
-  const [activeTab, setActiveTab] = useState("upcoming");
+  const [activeTab, setActiveTab] = useState("all");
   const tabRefs = useRef([]);
 
   // Arrow key navigation for tab list (WAI-ARIA tablist pattern)
@@ -29,7 +29,7 @@ export default function Events() {
   );
 
   const filtered = events
-    .filter((e) => e.status === activeTab)
+    .filter((e) => activeTab === "all" || e.status === activeTab)
     .sort((a, b) => {
       const da = new Date(a.date);
       const db = new Date(b.date);
@@ -37,6 +37,7 @@ export default function Events() {
     });
 
   const emptyMessages = {
+    all: "No events yet. Check back soon!",
     upcoming: "No upcoming events right now — check back soon!",
     past: "No past events yet. Stay tuned.",
   };
