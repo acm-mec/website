@@ -17,7 +17,11 @@ import {
   ShieldAlert,
   Info,
   Copy,
+  Upload,
+  Image as ImageIcon,
+  Loader2,
 } from "lucide-react";
+import { uploadToImgBB } from "../services/imgbb";
 import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
@@ -133,8 +137,19 @@ export default function Admin() {
     role: "",
     year: "3rd Year, CSE",
     bio: "",
+    image: "",
     github: "",
     linkedin: "",
+  });
+
+  const [uploadingImg, setUploadingImg] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [imgbbApiKey, setImgbbApiKey] = useState(() => {
+    try {
+      return localStorage.getItem("acm_imgbb_api_key") || "";
+    } catch {
+      return "";
+    }
   });
 
   const [configForm, setConfigForm] = useState({ ...siteConfig });
@@ -142,6 +157,7 @@ export default function Admin() {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const [formError, setFormError] = useState("");
+
 
   // Copy/export feedback
   const [copiedSection, setCopiedSection] = useState(null);
@@ -312,12 +328,14 @@ export default function Admin() {
   // ── Team Member Modal Handlers ──
   const openNewMemberModal = () => {
     const autoId = `member-${Date.now().toString().slice(-6)}`;
+    setUploadError("");
     setMemberForm({
       id: autoId,
       name: "",
       role: "",
       year: "3rd Year, CSE",
       bio: "",
+      image: "",
       github: "",
       linkedin: "",
     });
@@ -325,22 +343,57 @@ export default function Admin() {
   };
 
   const openEditMemberModal = (member) => {
+    setUploadError("");
     setMemberForm({
       id: member.id,
       name: member.name,
       role: member.role,
       year: member.year,
       bio: member.bio,
+      image: member.image || "",
       github: member.socials?.github || "",
       linkedin: member.socials?.linkedin || "",
     });
     setEditingMember({ isNew: false, id: member.id });
   };
 
+  const handleImageFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImg(true);
+    setUploadError("");
+
+    try {
+      const apiKeyToUse = imgbbApiKey.trim() || import.meta.env.VITE_IMGBB_API_KEY || "";
+      const result = await uploadToImgBB(file, apiKeyToUse);
+      setMemberForm((prev) => ({ ...prev, image: result.display_url }));
+    } catch (err) {
+      setUploadError(err.message || "Failed to upload image to ImgBB.");
+    } finally {
+      setUploadingImg(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleSaveApiKey = (key) => {
+    setImgbbApiKey(key);
+    try {
+      if (key) {
+        localStorage.setItem("acm_imgbb_api_key", key);
+      } else {
+        localStorage.removeItem("acm_imgbb_api_key");
+      }
+    } catch (e) {
+      console.error("Failed to save ImgBB API key to localStorage:", e);
+    }
+  };
+
   const handleSaveMember = (e) => {
     e.preventDefault();
     const github = safeExternalUrl(memberForm.github);
     const linkedin = safeExternalUrl(memberForm.linkedin);
+    const image = memberForm.image ? (safeExternalUrl(memberForm.image) || memberForm.image) : "";
     if ((memberForm.github.trim() && !github) || (memberForm.linkedin.trim() && !linkedin)) {
       setFormError("Social profile links must use http:// or https://.");
       return;
@@ -351,6 +404,7 @@ export default function Admin() {
       role: memberForm.role,
       year: memberForm.year,
       bio: memberForm.bio,
+      ...(image ? { image } : {}),
       socials: {
         github: github || "https://github.com/placeholder",
         linkedin: linkedin || "https://linkedin.com/in/placeholder",
@@ -810,6 +864,51 @@ export default function Admin() {
               </form>
             </div>
 
+            {/* ImgBB Media API Key Settings Card */}
+            <div className="bg-paper-raised border border-rule rounded-md p-6">
+              <h2 className="text-xl font-display font-semibold text-ink mb-2">
+                ImgBB Image Hosting Settings
+              </h2>
+              <p className="text-xs font-body text-ink-muted mb-4">
+                Configure your free ImgBB API Key to enable direct team member image uploads in the Admin Panel. Get a free API key at{" "}
+                <a
+                  href="https://api.imgbb.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo hover:underline font-mono"
+                >
+                  api.imgbb.com
+                </a>.
+              </p>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    ImgBB API Key
+                  </label>
+                  <input
+                    type="password"
+                    value={imgbbApiKey}
+                    onChange={(e) => handleSaveApiKey(e.target.value)}
+                    placeholder={import.meta.env.VITE_IMGBB_API_KEY ? "Using key from VITE_IMGBB_API_KEY environment variable" : "Paste your ImgBB API key here..."}
+                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                  />
+                </div>
+                {import.meta.env.VITE_IMGBB_API_KEY ? (
+                  <p className="font-mono text-xs text-emerald-500 flex items-center gap-1">
+                    <Check size={14} /> Environment variable <code className="bg-paper px-1 py-0.5 rounded">VITE_IMGBB_API_KEY</code> detected!
+                  </p>
+                ) : imgbbApiKey ? (
+                  <p className="font-mono text-xs text-emerald-500 flex items-center gap-1">
+                    <Check size={14} /> Custom ImgBB API key saved to browser memory.
+                  </p>
+                ) : (
+                  <p className="font-mono text-xs text-amber-500 flex items-center gap-1">
+                    <Info size={14} /> No API key set. Direct file uploads will be unavailable until a key is added.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -830,9 +929,21 @@ export default function Admin() {
               {team.map((m) => (
                 <Card key={m.id} className="relative flex flex-col justify-between">
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-mono text-xs text-indigo font-bold">{m.role}</span>
-                      <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center font-display font-semibold text-indigo">
+                          {m.image ? (
+                            <img src={m.image} alt={m.name} className="w-full h-full object-cover" />
+                          ) : (
+                            m.name.slice(0, 2).toUpperCase()
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-display font-semibold text-ink leading-tight">{m.name}</h3>
+                          <span className="font-mono text-xs text-indigo font-bold">{m.role}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 self-start">
                         <button
                           onClick={() => openEditMemberModal(m)}
                           title="Edit Member"
@@ -849,7 +960,6 @@ export default function Admin() {
                         </button>
                       </div>
                     </div>
-                    <h3 className="text-lg font-display font-semibold text-ink">{m.name}</h3>
                     <p className="font-mono text-xs text-ink-muted mb-2">{m.year}</p>
                     <p className="text-sm font-body text-ink-muted line-clamp-3 mb-4">{m.bio}</p>
                   </div>
@@ -1112,6 +1222,81 @@ export default function Admin() {
                       className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
                     />
                   </div>
+                </div>
+
+                {/* Profile Photo / Avatar Upload Field (ImgBB) */}
+                <div>
+                  <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                    Profile Photo / Avatar (ImgBB Upload)
+                  </label>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 bg-paper border border-rule rounded-md">
+                    <div className="w-16 h-16 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center relative">
+                      {memberForm.image ? (
+                        <img
+                          src={memberForm.image}
+                          alt="Avatar preview"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <ImageIcon className="text-indigo/50" size={24} />
+                      )}
+                    </div>
+
+                    <div className="flex-1 w-full space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label
+                          className={`cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded font-medium border transition-colors ${
+                            uploadingImg
+                              ? "bg-indigo/20 text-indigo border-indigo/30 opacity-70 pointer-events-none"
+                              : "bg-indigo text-white border-transparent hover:bg-indigo/90"
+                          }`}
+                        >
+                          {uploadingImg ? (
+                            <Loader2 size={14} className="animate-spin" />
+                          ) : (
+                            <Upload size={14} />
+                          )}
+                          {uploadingImg ? "Uploading to ImgBB..." : "Upload to ImgBB"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={uploadingImg}
+                            onChange={handleImageFileUpload}
+                            className="hidden"
+                          />
+                        </label>
+
+                        {memberForm.image && (
+                          <button
+                            type="button"
+                            onClick={() => setMemberForm({ ...memberForm, image: "" })}
+                            className="px-2.5 py-1.5 text-xs font-mono text-red-500 hover:text-red-600 border border-rule rounded hover:bg-red-500/10 transition-colors"
+                          >
+                            Remove Photo
+                          </button>
+                        )}
+                      </div>
+
+                      <input
+                        type="text"
+                        value={memberForm.image}
+                        onChange={(e) => setMemberForm({ ...memberForm, image: e.target.value })}
+                        placeholder="Or paste direct image URL (https://i.ibb.co/...)"
+                        className="w-full px-3 py-1.5 bg-paper-raised border border-rule rounded font-mono text-xs text-ink"
+                      />
+                    </div>
+                  </div>
+
+                  {uploadError && (
+                    <p className="font-mono text-xs text-red-500 mt-1 flex items-center gap-1">
+                      <ShieldAlert size={12} /> {uploadError}
+                    </p>
+                  )}
+                  {!uploadError && !import.meta.env.VITE_IMGBB_API_KEY && !imgbbApiKey && (
+                    <p className="font-mono text-[11px] text-amber-500 mt-1 flex items-center gap-1">
+                      <Info size={12} /> Set VITE_IMGBB_API_KEY in .env or configure your API key in Admin Settings to enable ImgBB uploads.
+                    </p>
+                  )}
                 </div>
 
                 <div>

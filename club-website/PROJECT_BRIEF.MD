@@ -55,4 +55,6 @@ Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewr
 
 ## Status
 - Last updated: 2026-08-02
-- Status: Functional React SPA with outputDirectory configured in vercel.json
+- Status: Implemented ImgBB image upload for team members in Admin panel and displayed photos across Team page.
+
+

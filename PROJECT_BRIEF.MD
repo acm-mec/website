@@ -53,4 +53,6 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-02
-- **Status:** Added Vercel `outputDirectory: "dist"` configuration and documented root directory settings.
+- **Status:** Fully implemented ImgBB image upload (`https://api.imgbb.com/`) for team members in the Admin Panel with fallback photo rendering on public site.
+
+

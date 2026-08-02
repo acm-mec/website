@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { UserIcon } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "../ui/SocialIcons";
 
@@ -6,7 +7,8 @@ import { GitHubIcon, LinkedInIcon } from "../ui/SocialIcons";
  * Shows a user-icon placeholder when name is still a bracketed placeholder.
  */
 export default function TeamMemberCard({ member }) {
-  const { name, role, year, bio, socials } = member;
+  const { name, role, year, bio, image, socials } = member;
+  const [imgError, setImgError] = useState(false);
 
   // Detect bracketed placeholder like "[MEMBER_NAME]"
   const isPlaceholder = /^\[.*\]$/.test(name.trim());
@@ -23,12 +25,21 @@ export default function TeamMemberCard({ member }) {
         .toUpperCase()
     : null;
 
+  const showImage = image && !imgError;
+
   return (
     <div className="bg-paper-raised border border-rule rounded-md p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 flex flex-col gap-4">
       {/* Avatar + name row */}
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center">
-          {initials ? (
+          {showImage ? (
+            <img
+              src={image}
+              alt={name}
+              onError={() => setImgError(true)}
+              className="w-full h-full object-cover"
+            />
+          ) : initials ? (
             <span className="font-display font-semibold text-lg text-indigo">
               {initials}
             </span>
@@ -40,6 +51,7 @@ export default function TeamMemberCard({ member }) {
             />
           )}
         </div>
+
         <div>
           <h3 className="text-xl font-display font-semibold text-ink leading-tight">
             {isPlaceholder ? (
