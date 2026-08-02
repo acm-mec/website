@@ -27,11 +27,11 @@ A public marketing-and-hub website for the ACM MEC technical/coding club (Model 
 | `*` | `NotFound.jsx` | 404 error page with quick redirect home |
 
 ## Content Management Architecture
-All club-specific content lives in static configuration files under `club-website/src/data/`:
-- **Site Details:** `src/data/siteConfig.js` — club name, tagline, email, founding year, social links
-- **Events:** `src/data/events.js` — event list, dates, locations, status tags
-- **Team Members:** `src/data/team.js` — member names, roles, avatars, socials
-- **Blog Posts:** `src/data/posts.js` — article metadata and Markdown content strings
+All club-specific text content and site configurations are centralized into a single, comprehensive Markdown document:
+- **Central Master Content File:** `SITE_CONTENT.md` (located at root `SITE_CONTENT.md` and `club-website/src/data/SITE_CONTENT.md`) — contains site details, page titles, headings, button labels, descriptions, and full documentation detailing where each item belongs.
+- **Site Details:** `src/data/siteConfig.js` — dynamically parses text content directly from `SITE_CONTENT.md`.
+- **Events:** `src/data/events.js` — individual event listings, dates, locations, status tags (remains separate per requirements).
+- **Team Members:** `src/data/team.js` — individual team member names, roles, avatars, socials (remains separate per requirements).
 
 ## Design System ("Terminal Notebook")
 Defined in `DESIGN_SYSTEM.md` and configured via Tailwind v4 CSS `@theme` tokens in `src/index.css`. Supports Light & Dark themes with `ThemeContext`.
@@ -50,4 +50,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-02
-- **Status:** Fully functional & verified static SPA.
+- **Status:** Single markdown file `SITE_CONTENT.md` created & integrated. Fully functional static SPA.
