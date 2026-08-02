@@ -24,6 +24,8 @@ import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import Badge from "../components/ui/Badge";
 import StatusMeta from "../components/ui/StatusMeta";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const SESSION_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes inactivity auto-logout
 
@@ -36,6 +38,48 @@ function safeExternalUrl(value) {
   } catch {
     return null;
   }
+}
+
+function timeTo24h(timeStr) {
+  if (!timeStr) return "";
+  const match = timeStr.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!match) return timeStr;
+  let hours = parseInt(match[1], 10);
+  const minutes = match[2];
+  const meridian = match[3].toUpperCase();
+  if (meridian === "PM" && hours !== 12) hours += 12;
+  if (meridian === "AM" && hours === 12) hours = 0;
+  return `${String(hours).padStart(2, "0")}:${minutes}`;
+}
+
+function timeFrom24h(hhmm) {
+  if (!hhmm) return "";
+  const [hoursStr, minutes] = hhmm.split(":");
+  let hours = parseInt(hoursStr, 10);
+  const meridian = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+  return `${hours}:${minutes} ${meridian}`;
+}
+
+function toPickerDate(date, time) {
+  if (!date) return null;
+  const [year, month, day] = date.split("-").map(Number);
+  const hhmm = timeTo24h(time) || "09:00";
+  const [hours, minutes] = hhmm.split(":").map(Number);
+  return new Date(year, month - 1, day, hours, minutes);
+}
+
+function fromPickerDate(value) {
+  if (!value) return { date: "", time: "" };
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  const hours = String(value.getHours()).padStart(2, "0");
+  const minutes = String(value.getMinutes()).padStart(2, "0");
+  return {
+    date: `${year}-${month}-${day}`,
+    time: timeFrom24h(`${hours}:${minutes}`),
+  };
 }
 
 export default function Admin() {
@@ -922,29 +966,23 @@ export default function Admin() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                      Date (YYYY-MM-DD)
+                      Date & Time
                     </label>
-                    <input
-                      type="date"
+                    <DatePicker
                       required
-                      value={eventForm.date}
-                      onChange={(e) => setEventForm({ ...eventForm, date: e.target.value })}
-                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-mono text-xs text-ink"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                      Time
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={eventForm.time}
-                      onChange={(e) => setEventForm({ ...eventForm, time: e.target.value })}
-                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                      selected={toPickerDate(eventForm.date, eventForm.time)}
+                      onChange={(value) =>
+                        setEventForm((form) => ({ ...form, ...fromPickerDate(value) }))
+                      }
+                      showTimeSelect
+                      timeIntervals={15}
+                      dateFormat="MMM d, yyyy h:mm aa"
+                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-mono text-xs text-ink focus:outline-none focus:ring-2 focus:ring-indigo"
+                      calendarClassName="acm-calendar"
+                      popperClassName="acm-calendar-popper"
                     />
                   </div>
                   <div>

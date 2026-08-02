@@ -51,3 +51,105 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── react-datepicker (Admin panel) ── */
+.acm-calendar.react-datepicker {
+  font-family: var(--font-body);
+  background-color: var(--color-paper-raised) !important;
+  border: 1px solid var(--color-rule) !important;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--color-ink) !important;
+}
+
+.acm-calendar .react-datepicker__header,
+.acm-calendar .react-datepicker__header--time {
+  background-color: var(--color-paper) !important;
+  border-bottom: 1px solid var(--color-rule) !important;
+  padding-top: 8px;
+}
+
+.acm-calendar .react-datepicker__current-month,
+.acm-calendar .react-datepicker-time__header,
+.acm-calendar .react-datepicker__day-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted) !important;
+}
+
+.acm-calendar .react-datepicker__day {
+  color: var(--color-ink) !important;
+  border-radius: 4px;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.acm-calendar .react-datepicker__day:hover {
+  background-color: var(--color-indigo) !important;
+  color: #ffffff !important;
+}
+
+.acm-calendar .react-datepicker__day--selected,
+.acm-calendar .react-datepicker__day--keyboard-selected {
+  background-color: var(--color-indigo) !important;
+  color: #ffffff !important;
+}
+
+.acm-calendar .react-datepicker__day--outside-month,
+.acm-calendar .react-datepicker__day--disabled {
+  color: var(--color-ink-muted) !important;
+  opacity: 0.4;
+}
+
+.acm-calendar .react-datepicker__navigation-icon::before {
+  border-color: var(--color-ink-muted) !important;
+}
+
+.acm-calendar .react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: var(--color-indigo) !important;
+}
+
+/* Time Picker Container & List styling (Fixes white-on-white text contrast issue) */
+.acm-calendar .react-datepicker__time-container,
+.acm-calendar .react-datepicker__time-container .react-datepicker__time,
+.acm-calendar .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box,
+.acm-calendar .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list {
+  background-color: var(--color-paper-raised) !important;
+  border-color: var(--color-rule) !important;
+}
+
+.acm-calendar .react-datepicker__time-list-item {
+  color: var(--color-ink) !important;
+  background-color: transparent !important;
+  border-radius: 4px;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.acm-calendar .react-datepicker__time-list-item:hover {
+  background-color: var(--color-indigo) !important;
+  color: #ffffff !important;
+}
+
+.acm-calendar .react-datepicker__time-list-item--selected {
+  background-color: var(--color-indigo) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .acm-calendar .react-datepicker__day--selected,
+[data-theme="dark"] .acm-calendar .react-datepicker__day--keyboard-selected,
+[data-theme="dark"] .acm-calendar .react-datepicker__time-list-item--selected {
+  background-color: var(--color-indigo) !important;
+  color: #070D17 !important;
+}
+
+.acm-calendar-popper {
+  z-index: 50;
+}
+
+/* Native select option fix for light/dark mode */
+select option {
+  background-color: var(--color-paper-raised);
+  color: var(--color-ink);
+}
