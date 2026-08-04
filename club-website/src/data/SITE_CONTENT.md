@@ -193,7 +193,7 @@
   - *Where it belongs*: Small uppercase tag above heading.
 - **Main Heading**: `Get in touch`
   - *Where it belongs*: H1 title of Contact page.
-- **Description**: `Whether you want to join, collaborate, or just ask a question — we're easy to reach. `
+- **Description**: `Whether you want to join, collaborate, or just ask a question — we're easy to reach.`
   - *Where it belongs*: Subtitle paragraph under main heading.
 
 ### Email Card
