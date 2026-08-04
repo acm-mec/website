@@ -97,7 +97,7 @@ export default function Contact() {
                 onClick={handleCopy}
                 aria-label={copied ? "Email copied!" : "Copy email address"}
                 title={copied ? "Copied!" : "Copy email"}
-                className="inline-flex items-center gap-1 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded p-0.5"
+                className="inline-flex items-center justify-center gap-1 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded p-1.5 min-h-[36px] min-w-[36px]"
               >
                 {copied ? (
                   <>

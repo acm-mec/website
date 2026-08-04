@@ -36,6 +36,8 @@ export default function TeamMemberCard({ member }) {
             <img
               src={image}
               alt={name}
+              loading="lazy"
+              decoding="async"
               onError={() => setImgError(true)}
               className="w-full h-full object-cover"
             />
@@ -73,14 +75,14 @@ export default function TeamMemberCard({ member }) {
 
       {/* Social links */}
       {socials && (
-        <div className="flex items-center gap-3 pt-1">
+        <div className="flex items-center gap-1 pt-1">
           {socials.github && (
             <a
               href={socials.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${name} on GitHub`}
-              className="text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded"
+              className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
             >
               <GitHubIcon size={17} />
             </a>
@@ -91,7 +93,7 @@ export default function TeamMemberCard({ member }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${name} on LinkedIn`}
-              className="text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded"
+              className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
             >
               <LinkedInIcon size={17} />
             </a>

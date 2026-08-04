@@ -36,6 +36,11 @@
 }
 
 /* ── Base ── */
+html,
+body {
+  overflow-x: hidden;
+}
+
 html {
   background-color: var(--color-paper);
   color: var(--color-ink);

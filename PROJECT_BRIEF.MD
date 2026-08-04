@@ -53,7 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Upgraded the "Ready to build with us?" CTA section on the homepage with a framed modern card design (`rounded-2xl`), cyan badge, grid overlay, ambient radial glow, primary cyan CTA button, and secondary event button.
-
-
-
+- **Status:** Completed mobile-friendliness polish pass across the application. Added lazy loading/async decoding for avatars, enhanced tap targets (~40px+) for primary icon action buttons, added global horizontal overflow-x guard, optimized social and email action tap areas, deleted unused hero asset, and verified lint & build pass cleanly.

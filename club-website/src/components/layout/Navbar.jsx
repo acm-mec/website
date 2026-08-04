@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-1">
           <ThemeToggle />
           <button
-            className="p-2 rounded text-ink hover:text-indigo focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 transition-colors duration-150"
+            className="p-2.5 rounded text-ink hover:text-indigo focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 transition-colors duration-150 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"

@@ -66,7 +66,7 @@ export default function Footer() {
             <p className="font-mono text-xs uppercase tracking-wide text-ink-muted mb-4">
               Find Us
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
               {socialIcons.map(({ key, Icon, label }) => (
                 <a
                   key={key}
@@ -74,7 +74,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded"
+                  className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                 >
                   <Icon size={20} />
                 </a>

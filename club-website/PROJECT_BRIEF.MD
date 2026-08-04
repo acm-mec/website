@@ -54,7 +54,7 @@ Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewr
 - **Output Directory:** `dist`
 
 ## Status
-- Last updated: 2026-08-02
-- Status: Implemented ImgBB image upload for team members in Admin panel and displayed photos across Team page.
+- Last updated: 2026-08-05
+- Status: Completed mobile-friendliness polish pass across the SPA (avatar lazy/async loading, ~40px+ tap targets, global overflow-x guard, social/email touch target expansion, unused asset cleanup, lint and build verification).
 
 

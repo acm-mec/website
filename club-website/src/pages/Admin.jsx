@@ -566,7 +566,7 @@ export default function Admin() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => {
                 if (window.confirm("Discard browser edits and reload the current src/data files?")) {
@@ -574,7 +574,7 @@ export default function Admin() {
                 }
               }}
               title="Reload content from src/data"
-              className="inline-flex items-center gap-1.5 px-3 py-2 border border-rule text-ink-muted hover:text-red-500 rounded font-mono text-xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[40px] border border-rule text-ink-muted hover:text-red-500 rounded font-mono text-xs transition-colors"
             >
               <RotateCcw size={14} />
               Reload Source Data
@@ -660,14 +660,14 @@ export default function Admin() {
                         <button
                           onClick={() => openEditEventModal(ev)}
                           title="Edit Event"
-                          className="p-1.5 text-ink-muted hover:text-indigo rounded transition-colors"
+                          className="p-2.5 text-ink-muted hover:text-indigo rounded transition-colors min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                         >
                           <Edit2 size={16} />
                         </button>
                         <button
                           onClick={() => handleDeleteEvent(ev.id, ev.title)}
                           title="Delete Event"
-                          className="p-1.5 text-ink-muted hover:text-red-500 rounded transition-colors"
+                          className="p-2.5 text-ink-muted hover:text-red-500 rounded transition-colors min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -933,7 +933,7 @@ export default function Admin() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center font-display font-semibold text-indigo">
                           {m.image ? (
-                            <img src={m.image} alt={m.name} className="w-full h-full object-cover" />
+                            <img src={m.image} alt={m.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           ) : (
                             m.name.slice(0, 2).toUpperCase()
                           )}
@@ -947,14 +947,14 @@ export default function Admin() {
                         <button
                           onClick={() => openEditMemberModal(m)}
                           title="Edit Member"
-                          className="p-1 text-ink-muted hover:text-indigo rounded"
+                          className="p-2.5 text-ink-muted hover:text-indigo rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                         >
                           <Edit2 size={16} />
                         </button>
                         <button
                           onClick={() => handleDeleteMember(m.id, m.name)}
                           title="Delete Member"
-                          className="p-1 text-ink-muted hover:text-red-500 rounded"
+                          className="p-2.5 text-ink-muted hover:text-red-500 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -1023,7 +1023,7 @@ export default function Admin() {
                 </h3>
                 <button
                   onClick={() => setEditingEvent(null)}
-                  className="p-1 text-ink-muted hover:text-ink rounded"
+                  className="p-2 text-ink-muted hover:text-ink rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                 >
                   <X size={20} />
                 </button>
@@ -1184,7 +1184,7 @@ export default function Admin() {
                 </h3>
                 <button
                   onClick={() => setEditingMember(null)}
-                  className="p-1 text-ink-muted hover:text-ink rounded"
+                  className="p-2 text-ink-muted hover:text-ink rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                 >
                   <X size={20} />
                 </button>
@@ -1235,6 +1235,8 @@ export default function Admin() {
                         <img
                           src={memberForm.image}
                           alt="Avatar preview"
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -1379,7 +1381,7 @@ export default function Admin() {
                 </div>
                 <button
                   onClick={() => setShowPreviewModal(false)}
-                  className="p-1 text-ink-muted hover:text-ink rounded"
+                  className="p-2 text-ink-muted hover:text-ink rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
                   aria-label="Close dialogue"
                 >
                   <X size={18} />
