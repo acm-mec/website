@@ -53,4 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Completed mobile-friendliness polish pass across the application. Added lazy loading/async decoding for avatars, enhanced tap targets (~40px+) for primary icon action buttons, added global horizontal overflow-x guard, optimized social and email action tap areas, deleted unused hero asset, and verified lint & build pass cleanly.
+- **Status:** Completed mobile-friendliness polish pass across the application (lazy/async image loading, ~40px+ tap targets, global overflow-x guard, social/email touch target expansion, unused asset cleanup). Removed the "Join Us" CTA button from the mobile navigation dropdown menu while preserving it on desktop header navigation. Verified lint and build pass cleanly.

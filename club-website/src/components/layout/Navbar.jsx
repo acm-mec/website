@@ -105,17 +105,6 @@ export default function Navbar() {
                 {label}
               </NavLink>
             ))}
-            <div className="pt-2 border-t border-rule">
-              <Button
-                as={Link}
-                to="/contact"
-                variant="primary"
-                className="w-full"
-                onClick={() => setOpen(false)}
-              >
-                Join Us
-              </Button>
-            </div>
           </div>
         </div>
       )}
