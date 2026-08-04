@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ArrowRight, Users, Calendar, Clock3 } from "lucide-react";
+import { ArrowRight, Users, Calendar, Clock3, Sparkles } from "lucide-react";
 import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
@@ -174,23 +174,66 @@ export default function Home() {
       </section>
 
       {/* ── CTA banner ── */}
-      <section className="py-16 md:py-24 bg-indigo text-white dark:text-[#070D17]">
+      <section className="py-16 md:py-24 bg-transparent border-t border-rule relative overflow-hidden">
         <Container>
-          <div className="text-center max-w-xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4">
-              {siteConfig.home?.cta?.heading || "Ready to build with us?"}
-            </h2>
-            <p className="text-base font-body opacity-90 leading-relaxed mb-8">
-              {siteConfig.home?.cta?.subtitle || "Join a community that ships things. We'd love to have you."}
-            </p>
-            <Button
-              as={Link}
-              to="/contact"
-              variant="secondary"
-              className="!bg-white !text-[#16181D] hover:!bg-gray-100 dark:!bg-[#070D17] dark:!text-white dark:hover:!bg-[#121E30] dark:!border-[#070D17] font-semibold border-none shadow-md"
+          <div className="relative rounded-2xl p-8 md:p-14 overflow-hidden border border-indigo-500/30 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 text-white shadow-2xl">
+            {/* Ambient background glow accents */}
+            <div
+              aria-hidden="true"
+              className="absolute -top-24 -right-24 w-80 h-80 bg-indigo-500/25 blur-3xl rounded-full pointer-events-none"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute -bottom-24 -left-24 w-80 h-80 bg-cyan-500/20 blur-3xl rounded-full pointer-events-none"
+            />
+
+            {/* Grid overlay */}
+            <svg
+              className="absolute inset-0 w-full h-full opacity-10 pointer-events-none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              {siteConfig.home?.cta?.buttonText || "Get in Touch"}
-            </Button>
+              <defs>
+                <pattern id="cta-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#cta-grid)" />
+            </svg>
+
+            {/* Content */}
+            <div className="relative z-10 text-center max-w-2xl mx-auto flex flex-col items-center">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 font-mono text-xs font-semibold text-cyan-300 uppercase tracking-widest mb-6">
+                <Sparkles size={14} className="text-cyan-300 animate-pulse" />
+                Join the Community
+              </span>
+
+              <h2 className="text-3xl md:text-5xl font-display font-extrabold tracking-tight text-white leading-[1.15] mb-5">
+                {siteConfig.home?.cta?.heading || "Ready to build with us?"}
+              </h2>
+
+              <p className="text-base md:text-lg font-body text-slate-300 leading-relaxed mb-8 max-w-xl">
+                {siteConfig.home?.cta?.subtitle || "Join a community that ships things. We'd love to have you."}
+              </p>
+
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-body font-semibold text-sm shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all duration-150 group"
+                >
+                  <span>{siteConfig.home?.cta?.buttonText || "Get in Touch"}</span>
+                  <ArrowRight
+                    size={16}
+                    className="group-hover:translate-x-1 transition-transform duration-150"
+                  />
+                </Link>
+                <Link
+                  to="/events"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-white/10 hover:bg-white/15 text-white border border-white/20 font-body font-medium text-sm backdrop-blur-sm hover:-translate-y-0.5 transition-all duration-150"
+                >
+                  Explore Events
+                </Link>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

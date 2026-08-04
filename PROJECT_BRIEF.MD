@@ -53,7 +53,7 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Reduced backdrop blur across sections and navbar (`backdrop-blur-sm` -> translucent `bg-paper-raised/40` / `backdrop-blur-[2px]`), giving maximum clarity and crispness to the background floating blue dots.
+- **Status:** Upgraded the "Ready to build with us?" CTA section on the homepage with a framed modern card design (`rounded-2xl`), cyan badge, grid overlay, ambient radial glow, primary cyan CTA button, and secondary event button.
 
 
 
