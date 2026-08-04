@@ -53,4 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Implemented team member reordering feature in `DataContext.jsx` (`moveTeamMember`) and added Move Up / Move Down buttons with position badges (`#1`, `#2`, etc.) on Admin panel team cards. Verified lint and build pass cleanly.
+- **Status:** Redesigned team member cards on public Team page (`TeamMemberCard.jsx`) and Admin panel (`Admin.jsx`) to showcase prominent, larger member photos (`aspect-[4/3] max-h-56` / `w-14 h-14`) and removed the unnecessary bio paragraph text block. Verified lint and build pass cleanly.

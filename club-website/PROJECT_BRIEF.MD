@@ -55,4 +55,4 @@ Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewr
 
 ## Status
 - Last updated: 2026-08-05
-- Status: Implemented team member reordering controls in `DataContext.jsx` and Admin Panel with persisted ordering. Verified lint and build pass cleanly.
+- Status: Enlarged team member profile photos and removed bio paragraphs from `TeamMemberCard.jsx` and Admin team cards. Verified lint and build pass cleanly.

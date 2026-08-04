@@ -971,11 +971,11 @@ export default function Admin() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {team.map((m, index) => (
-                <Card key={m.id} className="relative flex flex-col justify-between">
+                <Card key={m.id} className="relative flex flex-col justify-between h-full">
                   <div>
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-start justify-between gap-2 mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center font-display font-semibold text-indigo">
+                        <div className="w-14 h-14 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center font-display font-bold text-lg text-indigo">
                           {m.image ? (
                             <img src={m.image} alt={m.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           ) : (
@@ -983,11 +983,12 @@ export default function Admin() {
                           )}
                         </div>
                         <div>
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1.5 mb-0.5">
                             <h3 className="text-lg font-display font-semibold text-ink leading-tight">{m.name}</h3>
                             <span className="font-mono text-[10px] text-indigo/70 font-bold px-1.5 py-0.5 rounded bg-indigo/10">#{index + 1}</span>
                           </div>
-                          <span className="font-mono text-xs text-indigo font-bold">{m.role}</span>
+                          <p className="font-mono text-xs text-indigo font-bold mb-0.5">{m.role}</p>
+                          <p className="font-mono text-xs text-ink-muted">{m.year}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-0.5 self-start">
@@ -1023,8 +1024,6 @@ export default function Admin() {
                         </button>
                       </div>
                     </div>
-                    <p className="font-mono text-xs text-ink-muted mb-2">{m.year}</p>
-                    <p className="text-sm font-body text-ink-muted line-clamp-3 mb-3">{m.bio}</p>
 
                     {/* Active Social Links */}
                     {(() => {
