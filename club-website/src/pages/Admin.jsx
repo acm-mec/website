@@ -20,7 +20,15 @@ import {
   Upload,
   Image as ImageIcon,
   Loader2,
+  Globe,
 } from "lucide-react";
+import {
+  GitHubIcon,
+  LinkedInIcon,
+  InstagramIcon,
+  WhatsAppIcon,
+  TwitterIcon,
+} from "../components/ui/SocialIcons";
 import { uploadToImgBB } from "../services/imgbb";
 import { useData } from "../context/DataContext";
 import Container from "../components/ui/Container";
@@ -42,6 +50,23 @@ function safeExternalUrl(value) {
   } catch {
     return null;
   }
+}
+
+function formatSocialUrl(value, type) {
+  if (!value) return "";
+  let trimmed = value.trim();
+  if (!trimmed || trimmed.includes("placeholder")) return "";
+
+  if (type === "whatsapp" && /^\+?[\d\s-]{7,15}$/.test(trimmed)) {
+    const cleanNum = trimmed.replace(/[^\d]/g, "");
+    return `https://wa.me/${cleanNum}`;
+  }
+
+  if (!/^https?:\/\//i.test(trimmed)) {
+    trimmed = `https://${trimmed}`;
+  }
+
+  return safeExternalUrl(trimmed) || "";
 }
 
 function timeTo24h(timeStr) {
@@ -338,14 +363,17 @@ export default function Admin() {
       image: "",
       github: "",
       linkedin: "",
+      instagram: "",
+      whatsapp: "",
+      twitter: "",
+      website: "",
     });
     setEditingMember({ isNew: true });
   };
 
   const openEditMemberModal = (member) => {
     setUploadError("");
-    const rawGithub = member.socials?.github || "";
-    const rawLinkedin = member.socials?.linkedin || "";
+    const getClean = (val) => (val && typeof val === "string" && !val.includes("placeholder") ? val : "");
     setMemberForm({
       id: member.id,
       name: member.name,
@@ -353,8 +381,12 @@ export default function Admin() {
       year: member.year,
       bio: member.bio,
       image: member.image || "",
-      github: rawGithub.includes("placeholder") ? "" : rawGithub,
-      linkedin: rawLinkedin.includes("placeholder") ? "" : rawLinkedin,
+      github: getClean(member.socials?.github),
+      linkedin: getClean(member.socials?.linkedin),
+      instagram: getClean(member.socials?.instagram),
+      whatsapp: getClean(member.socials?.whatsapp),
+      twitter: getClean(member.socials?.twitter),
+      website: getClean(member.socials?.website),
     });
     setEditingMember({ isNew: false, id: member.id });
   };
@@ -393,17 +425,22 @@ export default function Admin() {
 
   const handleSaveMember = (e) => {
     e.preventDefault();
-    const github = safeExternalUrl(memberForm.github);
-    const linkedin = safeExternalUrl(memberForm.linkedin);
+    const github = formatSocialUrl(memberForm.github, "github");
+    const linkedin = formatSocialUrl(memberForm.linkedin, "linkedin");
+    const instagram = formatSocialUrl(memberForm.instagram, "instagram");
+    const whatsapp = formatSocialUrl(memberForm.whatsapp, "whatsapp");
+    const twitter = formatSocialUrl(memberForm.twitter, "twitter");
+    const website = formatSocialUrl(memberForm.website, "website");
+
     const image = memberForm.image ? (safeExternalUrl(memberForm.image) || memberForm.image) : "";
-    if ((memberForm.github.trim() && !github) || (memberForm.linkedin.trim() && !linkedin)) {
-      setFormError("Social profile links must use http:// or https://.");
-      return;
-    }
 
     const socials = {};
-    if (github && !github.includes("placeholder")) socials.github = github;
-    if (linkedin && !linkedin.includes("placeholder")) socials.linkedin = linkedin;
+    if (github) socials.github = github;
+    if (linkedin) socials.linkedin = linkedin;
+    if (instagram) socials.instagram = instagram;
+    if (whatsapp) socials.whatsapp = whatsapp;
+    if (twitter) socials.twitter = twitter;
+    if (website) socials.website = website;
 
     const memberPayload = {
       id: memberForm.id,
@@ -965,7 +1002,42 @@ export default function Admin() {
                       </div>
                     </div>
                     <p className="font-mono text-xs text-ink-muted mb-2">{m.year}</p>
-                    <p className="text-sm font-body text-ink-muted line-clamp-3 mb-4">{m.bio}</p>
+                    <p className="text-sm font-body text-ink-muted line-clamp-3 mb-3">{m.bio}</p>
+
+                    {/* Active Social Links */}
+                    {(() => {
+                      const activeSocials = [
+                        { key: "github", label: "GitHub", Icon: GitHubIcon },
+                        { key: "linkedin", label: "LinkedIn", Icon: LinkedInIcon },
+                        { key: "instagram", label: "Instagram", Icon: InstagramIcon },
+                        { key: "whatsapp", label: "WhatsApp", Icon: WhatsAppIcon },
+                        { key: "twitter", label: "Twitter", Icon: TwitterIcon },
+                        { key: "website", label: "Website", Icon: Globe },
+                      ].filter(({ key }) => {
+                        const val = m.socials?.[key];
+                        return Boolean(val && typeof val === "string" && val.trim() !== "" && !val.includes("placeholder"));
+                      });
+
+                      if (activeSocials.length === 0) return null;
+
+                      return (
+                        <div className="flex flex-wrap items-center gap-1 pt-2 border-t border-rule mt-2">
+                          {activeSocials.map(({ key, label, Icon }) => (
+                            <a
+                              key={key}
+                              href={m.socials[key]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${m.name} on ${label}`}
+                              title={`${label}: ${m.socials[key]}`}
+                              className="p-1.5 text-ink-muted hover:text-indigo transition-colors rounded min-h-[36px] min-w-[36px] inline-flex items-center justify-center"
+                            >
+                              <Icon size={15} />
+                            </a>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </Card>
               ))}
@@ -1335,24 +1407,74 @@ export default function Admin() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                      GitHub Profile URL
+                      GitHub URL
                     </label>
                     <input
                       type="text"
-                      value={memberForm.github}
+                      value={memberForm.github || ""}
                       onChange={(e) => setMemberForm({ ...memberForm, github: e.target.value })}
-                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                      placeholder="https://github.com/..."
+                      className="w-full px-3 py-1.5 bg-paper border border-rule rounded font-mono text-xs text-ink"
                     />
                   </div>
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
-                      LinkedIn Profile URL
+                      LinkedIn URL
                     </label>
                     <input
                       type="text"
-                      value={memberForm.linkedin}
+                      value={memberForm.linkedin || ""}
                       onChange={(e) => setMemberForm({ ...memberForm, linkedin: e.target.value })}
-                      className="w-full px-3 py-2 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                      placeholder="https://linkedin.com/in/..."
+                      className="w-full px-3 py-1.5 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      Instagram URL
+                    </label>
+                    <input
+                      type="text"
+                      value={memberForm.instagram || ""}
+                      onChange={(e) => setMemberForm({ ...memberForm, instagram: e.target.value })}
+                      placeholder="https://instagram.com/..."
+                      className="w-full px-3 py-1.5 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      WhatsApp (Number or Link)
+                    </label>
+                    <input
+                      type="text"
+                      value={memberForm.whatsapp || ""}
+                      onChange={(e) => setMemberForm({ ...memberForm, whatsapp: e.target.value })}
+                      placeholder="+91 9876543210 or wa.me/..."
+                      className="w-full px-3 py-1.5 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      Twitter / X URL
+                    </label>
+                    <input
+                      type="text"
+                      value={memberForm.twitter || ""}
+                      onChange={(e) => setMemberForm({ ...memberForm, twitter: e.target.value })}
+                      placeholder="https://x.com/..."
+                      className="w-full px-3 py-1.5 bg-paper border border-rule rounded font-mono text-xs text-ink"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
+                      Personal Website URL
+                    </label>
+                    <input
+                      type="text"
+                      value={memberForm.website || ""}
+                      onChange={(e) => setMemberForm({ ...memberForm, website: e.target.value })}
+                      placeholder="https://mywebsite.com"
+                      className="w-full px-3 py-1.5 bg-paper border border-rule rounded font-mono text-xs text-ink"
                     />
                   </div>
                 </div>

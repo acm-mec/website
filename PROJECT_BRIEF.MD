@@ -53,4 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Removed placeholder social media URLs (`github.com/placeholder`, etc.) from team data and updated `TeamMemberCard.jsx` and `Admin.jsx` to dynamically render social link buttons only when valid, non-empty profile links are provided. Verified lint and build pass cleanly.
+- **Status:** Displayed dynamic social links row (GitHub, LinkedIn, Instagram, WhatsApp, Twitter/X, Website) on team member cards inside the Admin Panel. Verified lint and build pass cleanly.

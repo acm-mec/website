@@ -1,6 +1,21 @@
 import { useState } from "react";
-import { UserIcon } from "lucide-react";
-import { GitHubIcon, LinkedInIcon } from "../ui/SocialIcons";
+import { UserIcon, Globe } from "lucide-react";
+import {
+  GitHubIcon,
+  LinkedInIcon,
+  InstagramIcon,
+  WhatsAppIcon,
+  TwitterIcon,
+} from "../ui/SocialIcons";
+
+const SOCIAL_PLATFORMS = [
+  { key: "github", label: "GitHub", Icon: GitHubIcon },
+  { key: "linkedin", label: "LinkedIn", Icon: LinkedInIcon },
+  { key: "instagram", label: "Instagram", Icon: InstagramIcon },
+  { key: "whatsapp", label: "WhatsApp", Icon: WhatsAppIcon },
+  { key: "twitter", label: "Twitter", Icon: TwitterIcon },
+  { key: "website", label: "Website", Icon: Globe },
+];
 
 /**
  * TeamMemberCard — photo (with initials fallback) + name + role + year + bio + socials.
@@ -26,6 +41,12 @@ export default function TeamMemberCard({ member }) {
     : null;
 
   const showImage = image && !imgError;
+
+  // Filter active, non-empty, non-placeholder social links
+  const activeSocials = SOCIAL_PLATFORMS.filter(({ key }) => {
+    const val = socials?.[key];
+    return Boolean(val && typeof val === "string" && val.trim() !== "" && !val.includes("placeholder"));
+  });
 
   return (
     <div className="bg-paper-raised border border-rule rounded-md p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 flex flex-col gap-4">
@@ -73,48 +94,23 @@ export default function TeamMemberCard({ member }) {
         {bio}
       </p>
 
-      {/* Social links */}
-      {(() => {
-        const hasGithub = Boolean(
-          socials?.github &&
-            socials.github.trim() !== "" &&
-            !socials.github.includes("placeholder")
-        );
-        const hasLinkedin = Boolean(
-          socials?.linkedin &&
-            socials.linkedin.trim() !== "" &&
-            !socials.linkedin.includes("placeholder")
-        );
-
-        if (!hasGithub && !hasLinkedin) return null;
-
-        return (
-          <div className="flex items-center gap-1 pt-1">
-            {hasGithub && (
-              <a
-                href={socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${name} on GitHub`}
-                className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
-              >
-                <GitHubIcon size={17} />
-              </a>
-            )}
-            {hasLinkedin && (
-              <a
-                href={socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${name} on LinkedIn`}
-                className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
-              >
-                <LinkedInIcon size={17} />
-              </a>
-            )}
-          </div>
-        );
-      })()}
+      {/* Dynamic social links */}
+      {activeSocials.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1 pt-1">
+          {activeSocials.map(({ key, label, Icon }) => (
+            <a
+              key={key}
+              href={socials[key]}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${name} on ${label}`}
+              className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+            >
+              <Icon size={17} />
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

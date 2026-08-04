@@ -63,7 +63,10 @@ export const team = [
     "year": "2nd Year, CSE",
     "bio": "Oversees technical planning for hackathons, workshops, and project initiatives, and leads the creation and maintenance of the ACM MEC website.",
     "socials": {
-      "linkedin": "https://www.linkedin.com/in/aaronschristo/"
+      "github": "https://github.com/aaronschristo",
+      "linkedin": "https://www.linkedin.com/in/aaronschristo/",
+      "instagram": "https://www.instagram.com/aaronschristo",
+      "whatsapp": "https://wa.me/9961849691"
     }
   },
   {

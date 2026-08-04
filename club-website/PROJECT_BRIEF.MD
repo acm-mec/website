@@ -55,6 +55,6 @@ Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewr
 
 ## Status
 - Last updated: 2026-08-05
-- Status: Removed placeholder social URLs from `src/data/team.js` and updated `TeamMemberCard.jsx` & `Admin.jsx` so social icon buttons only render when valid URLs are present. Verified lint and build pass cleanly.
+- Status: Rendered active social media links row (GitHub, LinkedIn, Instagram, WhatsApp, Twitter, Website) on team cards in Admin panel. Verified lint and build pass cleanly.
 
 
