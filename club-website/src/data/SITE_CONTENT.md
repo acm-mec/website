@@ -96,7 +96,7 @@
   - *Where it belongs*: Small uppercase tag above section title.
 - **Section Heading**:  We build things. Together.`
   - *Where it belongs*: Main heading for the About preview.
-- **Paragraph 1**: ACM MEC is the official student chapter of the Association for Computing Machinery at Government Model Engineering College, connecting students to a global computing community through hackathons, workshops, and hands-on learning that bridge classroom knowledge with real-world skill
+- **Paragraph 1**: `ACM MEC is the official student chapter of the Association for Computing Machinery at Government Model Engineering College, connecting students to a global computing community through hackathons, workshops, and hands-on learning that bridge classroom knowledge with real-world skill`
   - *Where it belongs*: First paragraph of the preview.
 - **Paragraph 2**: `We're open to everyone. You don't need a CS background, a GitHub profile, or a startup idea. You just need to show up.`
   - *Where it belongs*: Second paragraph of the preview.
@@ -126,9 +126,9 @@
   - *Where it belongs*: Small top tag above main heading.
 - **Main Heading**: `Who we are`
   - *Where it belongs*: H1 title of About page.
-- **Paragraph 1**: ACM MEC is the student chapter of the Association for Computing Machinery (ACM) at Government Model Engineering College, connecting us to the world's largest educational and scientific computing society, with nearly 1,00,000 members from more than 180 countries.
+- **Paragraph 1**: `ACM MEC is the student chapter of the Association for Computing Machinery (ACM) at Government Model Engineering College, connecting us to the world's largest educational and scientific computing society, with nearly 1,00,000 members from more than 180 countries.`
   - *Where it belongs*: First overview paragraph.
-- **Paragraph 2**: Through this affiliation, ACM MEC members gain access to a global network offering opportunities for life-long learning, career development, and professional networking, as well as international conferences, publications, and technical communities spanning every major domain of computing. As a chapter, we bring this global reach to campus through hackathons that challenge students to build real solutions under time pressure, workshops on tools and domains beyond the regular curriculum, and hands-on sessions coding drives, project clinics, and peer-learning circles that turn theoretical concepts into practical skill.
+- **Paragraph 2**: `Through this affiliation, ACM MEC members gain access to a global network offering opportunities for life-long learning, career development, and professional networking, as well as international conferences, publications, and technical communities spanning every major domain of computing. As a chapter, we bring this global reach to campus through hackathons that challenge students to build real solutions under time pressure, workshops on tools and domains beyond the regular curriculum, and hands-on sessions coding drives, project clinics, and peer-learning circles that turn theoretical concepts into practical skill.`
   - *Where it belongs*: Second overview paragraph explaining core focus.
 - **Paragraph 3**: `Membership is open to any student at the college. We've had members from CSE, IT, ECE, Mechanical, and even Civil. The only prerequisite is curiosity.`
   - *Where it belongs*: Third overview paragraph regarding membership eligibility.
@@ -144,25 +144,25 @@
 #### Pillar 1: Workshops
 - **Title**: `Workshops`
   - *Where it belongs*: Card 1 title.
-- **Description**: Hands-on sessions that take you beyond the syllabus, from the tools shaping the industry to the concepts your coursework never has time for. Walk in curious, walk out capable.
+- **Description**: `Hands-on sessions that take you beyond the syllabus, from the tools shaping the industry to the concepts your coursework never has time for. Walk in curious, walk out capable.`
   - *Where it belongs*: Card 1 description.
 
 #### Pillar 2: Hackathons
 - **Title**: `Hackathons`
   - *Where it belongs*: Card 2 title.
-- **Description**: Where ideas meet deadlines. Build something real, ship it fast, and discover what you're capable of when the clock's running and the team's got your back. The best project demos we've seen started as bad ideas at 2 AM.`
+- **Description**: `Where ideas meet deadlines. Build something real, ship it fast, and discover what you're capable of when the clock's running and the team's got your back. The best project demos we've seen started as bad ideas at 2 AM.`
   - *Where it belongs*: Card 2 description.
 
 #### Pillar 3: Open-Source Projects
 - **Title**: `Open-Source Projects`
   - *Where it belongs*: Card 3 title.
-- **Description**: Contribute to real codebases, work alongside other builders, and see your name in commit history that actually matters. This is where classroom code becomes real code.
+- **Description**: `Contribute to real codebases, work alongside other builders, and see your name in commit history that actually matters. This is where classroom code becomes real code.`
   - *Where it belongs*: Card 3 description.
 
 #### Pillar 4: Peer Mentorship
 - **Title**: `Peer Mentorship`
   - *Where it belongs*: Card 4 title.
-- **Description**: Senior members pair with juniors for study sessions, code reviews, and project feedback. If you're stuck, there's always someone who's been stuck in the same place.
+- **Description**: `Senior members pair with juniors for study sessions, code reviews, and project feedback. If you're stuck, there's always someone who's been stuck in the same place.`
   - *Where it belongs*: Card 4 description.
 
 ### Why Join Section
@@ -170,15 +170,15 @@
 
 - **Section Title**: `Why join?`
   - *Where it belongs*: H2 section title.
-- **Benefit 1**: Hands-on experience that goes beyond textbooks
-- **Benefit 2**: A community, not just a club
-- **Benefit 3**: A gateway to top-tier companies
+- **Benefit 1**: `Hands-on experience that goes beyond textbooks`
+- **Benefit 2**: `A community, not just a club`
+- **Benefit 3**: `A gateway to top-tier companies`
 ### Founding History Card
 > **Belongs To**: Side callout card on About page (`src/pages/About.jsx` -> Founding Blurb)
 
 - **Card Header**: `Established 2026`
   - *Where it belongs*: Top label inside founding card.
-- **Card Description**: The club was founded in 2026 by a group of students who felt that the gap between classroom theory and practical software development was too wide and too consequential to ignore. The founding principle —  **the best way to learn to build software is to build software.**
+- **Card Description**: `The club was founded in 2026 by a group of students who felt that the gap between classroom theory and practical software development was too wide and too consequential to ignore. The founding principle —  **the best way to learn to build software is to build software.**`
 
 ---
 
@@ -193,7 +193,7 @@
   - *Where it belongs*: Small uppercase tag above heading.
 - **Main Heading**: `Get in touch`
   - *Where it belongs*: H1 title of Contact page.
-- **Description**: Whether you want to join, collaborate, or just ask a question — we're easy to reach. 
+- **Description**: `Whether you want to join, collaborate, or just ask a question — we're easy to reach. `
   - *Where it belongs*: Subtitle paragraph under main heading.
 
 ### Email Card
@@ -244,5 +244,5 @@
   - *Where it belongs*: Small uppercase tag above heading.
 - **Main Heading**: `The people behind it`
   - *Where it belongs*: H1 title of Team page.
-- **Description**: Our core team stays lean by design. Everyone mentors, everyone builds, learning from each other as much as leading.
+- **Description**: `Our core team stays lean by design. Everyone mentors, everyone builds, learning from each other as much as leading.`
   - *Where it belongs*: Description paragraph under main heading.
