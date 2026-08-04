@@ -53,4 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Optimized Admin Event and Team Member edit modal layouts for mobile devices (`max-h-[85vh]`, internal scrollable body, compact spacing & textarea rows) while preserving full desktop proportions (`sm:` breakpoints). Verified lint and build pass cleanly.
+- **Status:** Removed placeholder social media URLs (`github.com/placeholder`, etc.) from team data and updated `TeamMemberCard.jsx` and `Admin.jsx` to dynamically render social link buttons only when valid, non-empty profile links are provided. Verified lint and build pass cleanly.

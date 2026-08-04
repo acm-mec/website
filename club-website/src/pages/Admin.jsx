@@ -344,6 +344,8 @@ export default function Admin() {
 
   const openEditMemberModal = (member) => {
     setUploadError("");
+    const rawGithub = member.socials?.github || "";
+    const rawLinkedin = member.socials?.linkedin || "";
     setMemberForm({
       id: member.id,
       name: member.name,
@@ -351,8 +353,8 @@ export default function Admin() {
       year: member.year,
       bio: member.bio,
       image: member.image || "",
-      github: member.socials?.github || "",
-      linkedin: member.socials?.linkedin || "",
+      github: rawGithub.includes("placeholder") ? "" : rawGithub,
+      linkedin: rawLinkedin.includes("placeholder") ? "" : rawLinkedin,
     });
     setEditingMember({ isNew: false, id: member.id });
   };
@@ -398,6 +400,11 @@ export default function Admin() {
       setFormError("Social profile links must use http:// or https://.");
       return;
     }
+
+    const socials = {};
+    if (github && !github.includes("placeholder")) socials.github = github;
+    if (linkedin && !linkedin.includes("placeholder")) socials.linkedin = linkedin;
+
     const memberPayload = {
       id: memberForm.id,
       name: memberForm.name,
@@ -405,10 +412,7 @@ export default function Admin() {
       year: memberForm.year,
       bio: memberForm.bio,
       ...(image ? { image } : {}),
-      socials: {
-        github: github || "https://github.com/placeholder",
-        linkedin: linkedin || "https://linkedin.com/in/placeholder",
-      },
+      socials,
     };
 
     if (editingMember.isNew) {

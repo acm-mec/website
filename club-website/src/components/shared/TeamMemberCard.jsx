@@ -74,32 +74,47 @@ export default function TeamMemberCard({ member }) {
       </p>
 
       {/* Social links */}
-      {socials && (
-        <div className="flex items-center gap-1 pt-1">
-          {socials.github && (
-            <a
-              href={socials.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${name} on GitHub`}
-              className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
-            >
-              <GitHubIcon size={17} />
-            </a>
-          )}
-          {socials.linkedin && (
-            <a
-              href={socials.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${name} on LinkedIn`}
-              className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
-            >
-              <LinkedInIcon size={17} />
-            </a>
-          )}
-        </div>
-      )}
+      {(() => {
+        const hasGithub = Boolean(
+          socials?.github &&
+            socials.github.trim() !== "" &&
+            !socials.github.includes("placeholder")
+        );
+        const hasLinkedin = Boolean(
+          socials?.linkedin &&
+            socials.linkedin.trim() !== "" &&
+            !socials.linkedin.includes("placeholder")
+        );
+
+        if (!hasGithub && !hasLinkedin) return null;
+
+        return (
+          <div className="flex items-center gap-1 pt-1">
+            {hasGithub && (
+              <a
+                href={socials.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} on GitHub`}
+                className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+              >
+                <GitHubIcon size={17} />
+              </a>
+            )}
+            {hasLinkedin && (
+              <a
+                href={socials.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} on LinkedIn`}
+                className="p-2 text-ink-muted hover:text-indigo transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+              >
+                <LinkedInIcon size={17} />
+              </a>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }

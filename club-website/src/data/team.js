@@ -5,10 +5,7 @@ export const team = [
     "role": "Chair",
     "year": "2nd Year, CSE",
     "bio": " Leads the chapter's overall direction, represents ACM MEC externally, and oversees all verticals.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    },
+    "socials": {},
     "image": "https://i.ibb.co/LTc6MK1/Starry-purple-magenta-nebula-sky-202607261132.jpg"
   },
   {
@@ -17,10 +14,7 @@ export const team = [
     "role": "Vice Chair",
     "year": "2nd Year, CSE",
     "bio": "Supports the Chair in strategy and execution, stepping in to coordinate across teams as needed.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "technical-lead",
@@ -28,10 +22,7 @@ export const team = [
     "role": "Treasurer",
     "year": "2nd Year, CSE",
     "bio": "Manages the chapter's finances, budgeting, and sponsorship funds.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "events-coordinator",
@@ -39,10 +30,7 @@ export const team = [
     "role": "Joint Treasurer",
     "year": "2nd Year, ECE",
     "bio": "Assists the Treasurer with day-to-day financial tracking and event budget management.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "design-lead",
@@ -50,10 +38,7 @@ export const team = [
     "role": "Secretary",
     "year": "2nd Year, CSE",
     "bio": "Maintains records, documentation, meeting minutes, and official communication.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "community-lead",
@@ -61,10 +46,7 @@ export const team = [
     "role": "Joint Secretary",
     "year": "2nd Year, CSE",
     "bio": "Supports the Secretary with documentation and coordination of internal processes.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-360633",
@@ -72,10 +54,7 @@ export const team = [
     "role": "Sergeant at Arms",
     "year": "2nd Year, CSE",
     "bio": "Ensures discipline, order, and smooth logistics during meetings and events",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-490196",
@@ -83,10 +62,7 @@ export const team = [
     "role": "Technical Head",
     "year": "2nd Year, CSE",
     "bio": "Oversees technical planning for hackathons, workshops, and project initiatives, and leads the creation and maintenance of the ACM MEC website.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-692831",
@@ -94,10 +70,7 @@ export const team = [
     "role": "Technical Coordinator",
     "year": "3rd Year, CSE",
     "bio": "Assists the Tech Head with execution — setup, tools, hands-on technical support, and ongoing upkeep of the chapter website.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-769597",
@@ -105,10 +78,7 @@ export const team = [
     "role": "Marketing Head",
     "year": "2nd Year, CSE",
     "bio": "Drives promotion, social media strategy, and outreach campaigns for events.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-833517",
@@ -116,10 +86,7 @@ export const team = [
     "role": "Outreach Head",
     "year": "2nd Year, CSE",
     "bio": "Builds partnerships with sponsors, speakers, and external organizations.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-876172",
@@ -127,10 +94,7 @@ export const team = [
     "role": "Creative Head",
     "year": "2nd Year, CSE",
     "bio": "Leads design direction for branding, posters, and visual content across the chapter.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-933462",
@@ -138,10 +102,7 @@ export const team = [
     "role": "Media Head",
     "year": "2nd Year, CSE",
     "bio": "Handles social media, photography, videography, and content coverage of events.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-034107",
@@ -149,10 +110,7 @@ export const team = [
     "role": "Membership Coordinator",
     "year": "2nd Year, CSE",
     "bio": "Manages member onboarding, engagement, and chapter records.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   },
   {
     "id": "member-073452",
@@ -160,9 +118,6 @@ export const team = [
     "role": "Ambience Head",
     "year": "2nd Year, CSE",
     "bio": "Manages venue setup, event atmosphere, and on-ground arrangements.",
-    "socials": {
-      "github": "https://github.com/placeholder",
-      "linkedin": "https://linkedin.com/in/placeholder"
-    }
+    "socials": {}
   }
 ];

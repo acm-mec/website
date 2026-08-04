@@ -55,6 +55,6 @@ Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewr
 
 ## Status
 - Last updated: 2026-08-05
-- Status: Optimized Event & Team Member edit modals for mobile viewports (`max-h-[85vh]`, internal scrollable body, compact spacing & responsive textarea rows) without affecting desktop layouts. Verified lint and build pass cleanly.
+- Status: Removed placeholder social URLs from `src/data/team.js` and updated `TeamMemberCard.jsx` & `Admin.jsx` so social icon buttons only render when valid URLs are present. Verified lint and build pass cleanly.
 
 
