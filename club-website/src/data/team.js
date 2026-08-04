@@ -90,7 +90,7 @@ export const team = [
   },
   {
     "id": "member-692831",
-    "name": "Aldrin",
+    "name": "Aldrin Antony",
     "role": "Technical Coordinator",
     "year": "3rd Year, CSE",
     "bio": "Assists the Tech Head with execution — setup, tools, hands-on technical support, and ongoing upkeep of the chapter website.",
