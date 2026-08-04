@@ -77,13 +77,13 @@ export default function Home() {
       </section>
 
       {/* ── Stats bar ── */}
-      <section className="py-12 bg-paper-raised/60 backdrop-blur-sm border-b border-rule">
+      <section className="py-12 bg-paper-raised/40 border-b border-rule">
         <Container>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {stats.map(({ icon: Icon, value, label }) => (
               <div
                 key={label}
-                className="flex items-center gap-4 p-4 rounded-md border border-rule hover:border-indigo transition-colors duration-150 bg-paper/60 backdrop-blur-sm"
+                className="flex items-center gap-4 p-4 rounded-md border border-rule hover:border-indigo transition-colors duration-150 bg-paper/40"
               >
                 <div className="w-10 h-10 rounded bg-indigo/10 flex items-center justify-center flex-shrink-0">
                   <Icon size={20} className="text-indigo" aria-hidden="true" />
@@ -116,7 +116,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="py-12 text-center border border-rule rounded-md bg-paper-raised/70 backdrop-blur-sm">
+            <div className="py-12 text-center border border-rule rounded-md bg-paper-raised/50">
               <p className="font-mono text-sm text-ink-muted">
                 {siteConfig.home?.upcomingEvents?.emptyText || "No upcoming events right now — check back soon."}
               </p>
@@ -139,7 +139,7 @@ export default function Home() {
       </section>
 
       {/* ── About preview ── */}
-      <section className="py-16 md:py-24 bg-paper-raised/60 backdrop-blur-sm border-b border-rule">
+      <section className="py-16 md:py-24 bg-paper-raised/40 border-b border-rule">
         <Container>
           <div className="max-w-2xl">
             <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-4">

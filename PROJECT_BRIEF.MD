@@ -53,7 +53,7 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Fixed background opacity on Home (`Home.jsx`) and About (`About.jsx`) page sections to `bg-transparent` / `bg-paper-raised/60 backdrop-blur-sm`, allowing the interactive floating blue dots animation layer (`FloatingDots.jsx`) to render seamlessly across all pages.
+- **Status:** Reduced backdrop blur across sections and navbar (`backdrop-blur-sm` -> translucent `bg-paper-raised/40` / `backdrop-blur-[2px]`), giving maximum clarity and crispness to the background floating blue dots.
 
 
 

@@ -39,7 +39,7 @@ export default function Navbar() {
     }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-paper/90 backdrop-blur border-b border-rule">
+    <header className="sticky top-0 z-50 bg-paper/85 backdrop-blur-[2px] border-b border-rule">
       <nav
         aria-label="Main navigation"
         className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between"
