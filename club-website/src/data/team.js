@@ -2,8 +2,8 @@ export const team = [
   {
     "id": "president",
     "name": "gautham",
-    "role": "President",
-    "year": "3rd Year, CSE",
+    "role": "Chair",
+    "year": "2nd Year, CSE",
     "bio": "Leads club direction and partnerships. Into distributed systems and bad puns. Spent last summer contributing to an open-source observability tool.",
     "socials": {
       "github": "https://github.com/placeholder",
