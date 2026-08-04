@@ -58,12 +58,6 @@ export default function Home() {
 
         <Container className="relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-paper-raised border border-rule mb-6 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
-              <span className="font-mono text-xs text-ink-muted uppercase tracking-wider">
-                {siteConfig.clubName} · {siteConfig.home?.hero?.badgeCollegeName || "Model Engineering College"}
-              </span>
-            </div>
             <h1 className="text-5xl md:text-7xl font-display font-bold text-ink tracking-tight leading-[1.08] mb-4">
               <TypingHeadline text={siteConfig.tagline} speed={60} />
             </h1>

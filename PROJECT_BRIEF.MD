@@ -52,8 +52,8 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 - **Output Directory:** `dist` (configured in `club-website/vercel.json` and Vite defaults)
 
 ## Status
-- **Last Updated:** 2026-08-04
-- **Status:** Added `.obsidian/` directory pattern to `.gitignore` files to ignore local Obsidian vault metadata.
+- **Last Updated:** 2026-08-05
+- **Status:** Removed top hero badge element (`ACM MEC · MODEL ENGINEERING COLLEGE`) from Home page hero section.
 
 
 
