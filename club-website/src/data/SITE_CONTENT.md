@@ -94,7 +94,7 @@
 
 - **Category Badge**: `About the Club`
   - *Where it belongs*: Small uppercase tag above section title.
-- **Section Heading**:  We build things. Together.`
+- **Section Heading**: `We build things. Together.`
   - *Where it belongs*: Main heading for the About preview.
 - **Paragraph 1**: `ACM MEC is the official student chapter of the Association for Computing Machinery at Government Model Engineering College, connecting students to a global computing community through hackathons, workshops, and hands-on learning that bridge classroom knowledge with real-world skill`
   - *Where it belongs*: First paragraph of the preview.
@@ -170,15 +170,19 @@
 
 - **Section Title**: `Why join?`
   - *Where it belongs*: H2 section title.
+- **Section Subtitle**: `The practical case for spending time here.`
+  - *Where it belongs*: Subtitle line under section title.
 - **Benefit 1**: `Hands-on experience that goes beyond textbooks`
 - **Benefit 2**: `A community, not just a club`
 - **Benefit 3**: `A gateway to top-tier companies`
+- **Benefit 4**: `Access a network of alumni in software, research, and startups.`
+
 ### Founding History Card
 > **Belongs To**: Side callout card on About page (`src/pages/About.jsx` -> Founding Blurb)
 
 - **Card Header**: `Established 2026`
   - *Where it belongs*: Top label inside founding card.
-- **Card Description**: `The club was founded in 2026 by a group of students who felt that the gap between classroom theory and practical software development was too wide and too consequential to ignore. The founding principle —  **the best way to learn to build software is to build software.**`
+- **Card Description**: `The club was founded in 2026 by a group of students who felt that the gap between classroom theory and practical software development was too wide and too consequential to ignore. The founding principle — the best way to learn to build software is to build software.`
 
 ---
 
