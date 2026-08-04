@@ -53,4 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Displayed dynamic social links row (GitHub, LinkedIn, Instagram, WhatsApp, Twitter/X, Website) on team member cards inside the Admin Panel. Verified lint and build pass cleanly.
+- **Status:** Set default website theme to dark mode across `ThemeContext.jsx` and `index.html` (with an anti-flash inline script on initial load).
