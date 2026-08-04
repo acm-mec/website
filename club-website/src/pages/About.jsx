@@ -50,7 +50,7 @@ export default function About() {
   return (
     <>
       {/* ── Page header ── */}
-      <section className="py-16 md:py-24 border-b border-rule bg-paper">
+      <section className="py-16 md:py-24 border-b border-rule bg-transparent">
         <Container>
           <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-4">
             {siteConfig.about?.header?.badge || "About"}
@@ -79,7 +79,7 @@ export default function About() {
       </section>
 
       {/* ── What we do ── */}
-      <section className="py-16 md:py-24 bg-paper-raised border-b border-rule">
+      <section className="py-16 md:py-24 bg-paper-raised/60 backdrop-blur-sm border-b border-rule">
         <Container>
           <SectionHeading
             title={siteConfig.about?.pillarsSection?.title || "What we do"}
@@ -89,7 +89,7 @@ export default function About() {
             {pillars.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="bg-paper border border-rule rounded-md p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-indigo transition-all duration-150"
+                className="bg-paper/70 backdrop-blur-sm border border-rule rounded-md p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-indigo transition-all duration-150"
               >
                 <div className="w-10 h-10 rounded bg-indigo/10 flex items-center justify-center mb-4">
                   <Icon size={20} className="text-indigo" aria-hidden="true" />
@@ -107,7 +107,7 @@ export default function About() {
       </section>
 
       {/* ── Why join ── */}
-      <section className="py-16 md:py-24 bg-paper border-b border-rule">
+      <section className="py-16 md:py-24 bg-transparent border-b border-rule">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             <div>
@@ -132,7 +132,7 @@ export default function About() {
             </div>
 
             {/* Founding blurb */}
-            <div className="bg-paper-raised border border-rule rounded-md p-6">
+            <div className="bg-paper-raised/70 backdrop-blur-sm border border-rule rounded-md p-6">
               <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-3">
                 {siteConfig.about?.founding?.header || `Established ${siteConfig.foundingYear}`}
               </p>

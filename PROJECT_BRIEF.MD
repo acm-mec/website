@@ -53,7 +53,7 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Removed top hero badge element (`ACM MEC · MODEL ENGINEERING COLLEGE`) from Home page hero section.
+- **Status:** Fixed background opacity on Home (`Home.jsx`) and About (`About.jsx`) page sections to `bg-transparent` / `bg-paper-raised/60 backdrop-blur-sm`, allowing the interactive floating blue dots animation layer (`FloatingDots.jsx`) to render seamlessly across all pages.
 
 
 
