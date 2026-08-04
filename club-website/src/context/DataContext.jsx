@@ -107,6 +107,17 @@ export function DataProvider({ children }) {
     setTeam((prev) => prev.filter((m) => m.id !== id));
   };
 
+  const moveTeamMember = (index, direction) => {
+    setTeam((prev) => {
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= prev.length) return prev;
+      const updated = [...prev];
+      const [movedItem] = updated.splice(index, 1);
+      updated.splice(targetIndex, 0, movedItem);
+      return updated;
+    });
+  };
+
   // ── Site Config Update ──
   const updateSiteConfig = (newConfig) => {
     setSiteConfig((prev) => ({
@@ -145,6 +156,7 @@ export function DataProvider({ children }) {
         addTeamMember,
         updateTeamMember,
         deleteTeamMember,
+        moveTeamMember,
         updateSiteConfig,
         reloadSourceData,
       }}

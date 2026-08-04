@@ -53,4 +53,4 @@ Push to `main` branch on GitHub → Vercel auto-deploys Vite SPA with `vercel.js
 
 ## Status
 - **Last Updated:** 2026-08-05
-- **Status:** Set default website theme to dark mode across `ThemeContext.jsx` and `index.html` (with an anti-flash inline script on initial load).
+- **Status:** Implemented team member reordering feature in `DataContext.jsx` (`moveTeamMember`) and added Move Up / Move Down buttons with position badges (`#1`, `#2`, etc.) on Admin panel team cards. Verified lint and build pass cleanly.

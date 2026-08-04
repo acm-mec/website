@@ -21,6 +21,8 @@ import {
   Image as ImageIcon,
   Loader2,
   Globe,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import {
   GitHubIcon,
@@ -122,6 +124,7 @@ export default function Admin() {
     addTeamMember,
     updateTeamMember,
     deleteTeamMember,
+    moveTeamMember,
     updateSiteConfig,
     reloadSourceData,
   } = useData();
@@ -967,7 +970,7 @@ export default function Admin() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {team.map((m) => (
+              {team.map((m, index) => (
                 <Card key={m.id} className="relative flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-3">
@@ -980,24 +983,43 @@ export default function Admin() {
                           )}
                         </div>
                         <div>
-                          <h3 className="text-lg font-display font-semibold text-ink leading-tight">{m.name}</h3>
+                          <div className="flex items-center gap-1.5">
+                            <h3 className="text-lg font-display font-semibold text-ink leading-tight">{m.name}</h3>
+                            <span className="font-mono text-[10px] text-indigo/70 font-bold px-1.5 py-0.5 rounded bg-indigo/10">#{index + 1}</span>
+                          </div>
                           <span className="font-mono text-xs text-indigo font-bold">{m.role}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 self-start">
+                      <div className="flex items-center gap-0.5 self-start">
+                        <button
+                          onClick={() => moveTeamMember(index, "up")}
+                          disabled={index === 0}
+                          title="Move Up"
+                          className="p-1.5 text-ink-muted hover:text-indigo disabled:opacity-20 disabled:pointer-events-none rounded transition-colors"
+                        >
+                          <ArrowUp size={15} />
+                        </button>
+                        <button
+                          onClick={() => moveTeamMember(index, "down")}
+                          disabled={index === team.length - 1}
+                          title="Move Down"
+                          className="p-1.5 text-ink-muted hover:text-indigo disabled:opacity-20 disabled:pointer-events-none rounded transition-colors"
+                        >
+                          <ArrowDown size={15} />
+                        </button>
                         <button
                           onClick={() => openEditMemberModal(m)}
                           title="Edit Member"
-                          className="p-2.5 text-ink-muted hover:text-indigo rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+                          className="p-1.5 text-ink-muted hover:text-indigo rounded transition-colors"
                         >
-                          <Edit2 size={16} />
+                          <Edit2 size={15} />
                         </button>
                         <button
                           onClick={() => handleDeleteMember(m.id, m.name)}
                           title="Delete Member"
-                          className="p-2.5 text-ink-muted hover:text-red-500 rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+                          className="p-1.5 text-ink-muted hover:text-red-500 rounded transition-colors"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </div>
