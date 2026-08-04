@@ -6,7 +6,7 @@ import EventCard from "../components/shared/EventCard";
 const TABS = ["all", "upcoming", "past"];
 
 export default function Events() {
-  const { events } = useData();
+  const { siteConfig, events } = useData();
   const [activeTab, setActiveTab] = useState("all");
   const tabRefs = useRef([]);
 
@@ -37,9 +37,9 @@ export default function Events() {
     });
 
   const emptyMessages = {
-    all: "No events yet. Check back soon!",
-    upcoming: "No upcoming events right now — check back soon!",
-    past: "No past events yet. Stay tuned.",
+    all: siteConfig.eventsPage?.emptyMessages?.all || "No events yet. Check back soon!",
+    upcoming: siteConfig.eventsPage?.emptyMessages?.upcoming || "No upcoming events right now — check back soon!",
+    past: siteConfig.eventsPage?.emptyMessages?.past || "No past events yet. Stay tuned.",
   };
 
   return (
@@ -47,11 +47,12 @@ export default function Events() {
       <Container>
         {/* Header */}
         <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-4">
-          Events
+          {siteConfig.eventsPage?.header?.badge || "Events"}
         </p>
         <h1 className="text-5xl md:text-6xl font-display font-bold text-ink tracking-tight leading-[1.08] mb-8">
-          What's happening
+          {siteConfig.eventsPage?.header?.heading || "What's happening"}
         </h1>
+
 
         {/* Tab toggle with keyboard arrow navigation */}
         <div

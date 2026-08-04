@@ -27,6 +27,7 @@ lerna-debug.log*
 .vscode/*
 !.vscode/extensions.json
 .idea
+.obsidian/
 .DS_Store
 Thumbs.db
 *.suo

@@ -61,14 +61,14 @@ export default function Contact() {
     <section className="py-16 md:py-24">
       <Container>
         <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-4">
-          Contact
+          {siteConfig.contact?.header?.badge || "Contact"}
         </p>
         <h1 className="text-5xl md:text-6xl font-display font-bold text-ink tracking-tight leading-[1.08] mb-4">
-          Get in touch
+          {siteConfig.contact?.header?.heading || "Get in touch"}
         </h1>
         <p className="text-base font-body text-ink-muted leading-relaxed mb-12 max-w-xl">
-          Whether you want to join, collaborate, or just ask a question — we're
-          easy to reach. Pick whatever channel works best for you.
+          {siteConfig.contact?.header?.description ||
+            "Whether you want to join, collaborate, or just ask a question — we're easy to reach. Pick whatever channel works best for you."}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
@@ -78,11 +78,11 @@ export default function Contact() {
               <Mail size={20} className="text-indigo" aria-hidden="true" />
             </div>
             <h2 className="text-xl font-display font-semibold text-ink mb-2">
-              Email us
+              {siteConfig.contact?.emailCard?.heading || "Email us"}
             </h2>
             <p className="text-base font-body text-ink-muted leading-relaxed mb-4">
-              The best way to reach us for membership inquiries, event
-              questions, or partnership opportunities.
+              {siteConfig.contact?.emailCard?.description ||
+                "The best way to reach us for membership inquiries, event questions, or partnership opportunities."}
             </p>
 
             {/* Email address + copy button */}
@@ -114,7 +114,7 @@ export default function Contact() {
           {/* Socials block */}
           <div className="bg-paper-raised border border-rule rounded-md p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-150">
             <h2 className="text-xl font-display font-semibold text-ink mb-5">
-              Find us online
+              {siteConfig.contact?.socialsCard?.heading || "Find us online"}
             </h2>
             <ul className="flex flex-col gap-4">
               {socialLinks.map(({ key, Icon, label, handle }) => (

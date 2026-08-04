@@ -19,17 +19,17 @@ export default function Home() {
     {
       icon: Users,
       value: team.length + "+",
-      label: "Active Members",
+      label: siteConfig.home?.stats?.membersLabel || "Active Members",
     },
     {
       icon: Calendar,
       value: events.length + "+",
-      label: "Events Hosted",
+      label: siteConfig.home?.stats?.eventsLabel || "Events Hosted",
     },
     {
       icon: Clock3,
       value: `Est. ${siteConfig.foundingYear}`,
-      label: "Years Running",
+      label: siteConfig.home?.stats?.yearsLabel || "Years Running",
     },
   ];
 
@@ -61,7 +61,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-paper-raised border border-rule mb-6 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-signal animate-pulse" />
               <span className="font-mono text-xs text-ink-muted uppercase tracking-wider">
-                {siteConfig.clubName} · Model Engineering College
+                {siteConfig.clubName} · {siteConfig.home?.hero?.badgeCollegeName || "Model Engineering College"}
               </span>
             </div>
             <h1 className="text-5xl md:text-7xl font-display font-bold text-ink tracking-tight leading-[1.08] mb-4">
@@ -72,10 +72,10 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Button as={Link} to="/contact" variant="primary">
-                Join the Club
+                {siteConfig.home?.hero?.primaryButton || "Join the Club"}
               </Button>
               <Button as={Link} to="/events" variant="secondary">
-                View Events
+                {siteConfig.home?.hero?.secondaryButton || "View Events"}
               </Button>
             </div>
           </div>
@@ -112,8 +112,8 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-paper border-b border-rule">
         <Container>
           <SectionHeading
-            title="Upcoming Events"
-            subtitle="What we're running next. All are open to any student."
+            title={siteConfig.home?.upcomingEvents?.title || "Upcoming Events"}
+            subtitle={siteConfig.home?.upcomingEvents?.subtitle || "What we're running next. All are open to any student."}
           />
           {upcomingEvents.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -124,7 +124,7 @@ export default function Home() {
           ) : (
             <div className="py-12 text-center border border-rule rounded-md bg-paper-raised">
               <p className="font-mono text-sm text-ink-muted">
-                No upcoming events right now — check back soon.
+                {siteConfig.home?.upcomingEvents?.emptyText || "No upcoming events right now — check back soon."}
               </p>
             </div>
           )}
@@ -133,7 +133,7 @@ export default function Home() {
               to="/events"
               className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-indigo hover:text-[--color-indigo-hover] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded group"
             >
-              View All Events
+              {siteConfig.home?.upcomingEvents?.viewAllText || "View All Events"}
               <ArrowRight
                 size={14}
                 aria-hidden="true"
@@ -149,22 +149,26 @@ export default function Home() {
         <Container>
           <div className="max-w-2xl">
             <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-4">
-              About the Club
+              {siteConfig.home?.aboutPreview?.badge || "About the Club"}
             </p>
             <h2 className="text-3xl md:text-4xl font-display font-semibold text-ink tracking-tight mb-4">
-              We build things. Together.
+              {siteConfig.home?.aboutPreview?.heading || "We build things. Together."}
             </h2>
-            <p className="text-base font-body text-ink-muted leading-relaxed mb-3">
-              ACM MEC is a technical club at the intersection of curiosity and execution. We believe the best way to learn computing is to build something real — whether that's a 24-hour hackathon project, an open-source contribution, or a workshop that finally makes Git click.
-            </p>
-            <p className="text-base font-body text-ink-muted leading-relaxed mb-6">
-              We're open to everyone. You don't need a CS background, a GitHub profile, or a startup idea. You just need to show up.
-            </p>
+            {siteConfig.home?.aboutPreview?.paragraph1 && (
+              <p className="text-base font-body text-ink-muted leading-relaxed mb-3">
+                {siteConfig.home.aboutPreview.paragraph1}
+              </p>
+            )}
+            {siteConfig.home?.aboutPreview?.paragraph2 && (
+              <p className="text-base font-body text-ink-muted leading-relaxed mb-6">
+                {siteConfig.home.aboutPreview.paragraph2}
+              </p>
+            )}
             <Link
               to="/about"
               className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-indigo hover:text-[--color-indigo-hover] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo focus:ring-offset-1 rounded group"
             >
-              Learn more about us
+              {siteConfig.home?.aboutPreview?.learnMoreText || "Learn more about us"}
               <ArrowRight
                 size={14}
                 aria-hidden="true"
@@ -180,10 +184,10 @@ export default function Home() {
         <Container>
           <div className="text-center max-w-xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4">
-              Ready to build with us?
+              {siteConfig.home?.cta?.heading || "Ready to build with us?"}
             </h2>
             <p className="text-base font-body opacity-90 leading-relaxed mb-8">
-              Join a community that ships things. We'd love to have you.
+              {siteConfig.home?.cta?.subtitle || "Join a community that ships things. We'd love to have you."}
             </p>
             <Button
               as={Link}
@@ -191,7 +195,7 @@ export default function Home() {
               variant="secondary"
               className="!bg-white !text-[#16181D] hover:!bg-gray-100 dark:!bg-[#070D17] dark:!text-white dark:hover:!bg-[#121E30] dark:!border-[#070D17] font-semibold border-none shadow-md"
             >
-              Get in Touch
+              {siteConfig.home?.cta?.buttonText || "Get in Touch"}
             </Button>
           </div>
         </Container>
@@ -199,3 +203,4 @@ export default function Home() {
     </>
   );
 }
+
