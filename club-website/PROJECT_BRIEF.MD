@@ -55,6 +55,6 @@ Push to `main` on GitHub and Vercel auto-deploys the SPA with `vercel.json` rewr
 
 ## Status
 - Last updated: 2026-08-05
-- Status: Completed mobile-friendliness polish pass across the SPA (avatar lazy/async loading, ~40px+ tap targets, global overflow-x guard, social/email touch target expansion, unused asset cleanup). Removed "Join Us" button from mobile navigation dropdown. Verified lint and build pass cleanly.
+- Status: Optimized Event & Team Member edit modals for mobile viewports (`max-h-[85vh]`, internal scrollable body, compact spacing & responsive textarea rows) without affecting desktop layouts. Verified lint and build pass cleanly.
 
 

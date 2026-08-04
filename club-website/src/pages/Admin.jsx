@@ -1015,27 +1015,27 @@ export default function Admin() {
 
         {/* ── EVENT EDIT/NEW MODAL ── */}
         {editingEvent && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-paper-raised border border-rule rounded-md max-w-xl w-full p-6 shadow-xl my-8">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-rule">
-                <h3 className="text-xl font-display font-semibold text-ink">
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+            <div className="bg-paper-raised border border-rule rounded-md max-w-xl w-full p-4 sm:p-6 shadow-xl my-4 sm:my-8 max-h-[85vh] sm:max-h-[90vh] flex flex-col">
+              <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-rule flex-shrink-0">
+                <h3 className="text-lg sm:text-xl font-display font-semibold text-ink">
                   {editingEvent.isNew ? "Create New Event" : "Edit Event"}
                 </h3>
                 <button
                   onClick={() => setEditingEvent(null)}
-                  className="p-2 text-ink-muted hover:text-ink rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+                  className="p-1.5 sm:p-2 text-ink-muted hover:text-ink rounded min-h-[36px] sm:min-h-[40px] min-w-[36px] sm:min-w-[40px] inline-flex items-center justify-center"
                 >
                   <X size={20} />
                 </button>
               </div>
 
-              <form onSubmit={handleSaveEvent} className="space-y-4">
+              <form onSubmit={handleSaveEvent} className="space-y-3 sm:space-y-4 overflow-y-auto flex-1 pr-1 sm:pr-2">
                 {formError && (
                   <p className="font-mono text-xs text-red-500 flex items-center gap-1">
                     <ShieldAlert size={14} /> {formError}
                   </p>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
                       Event ID (Unique)
@@ -1076,7 +1076,7 @@ export default function Admin() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
                       Date & Time
@@ -1127,11 +1127,11 @@ export default function Admin() {
                     Full Description (Detail Page)
                   </label>
                   <textarea
-                    rows={4}
+                    rows={2}
                     required
                     value={eventForm.longDescription}
                     onChange={(e) => setEventForm({ ...eventForm, longDescription: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                    className="w-full px-3 py-1.5 sm:py-2 bg-paper border border-rule rounded font-body text-ink sm:rows-4"
                   />
                 </div>
 
@@ -1176,27 +1176,27 @@ export default function Admin() {
 
         {/* ── TEAM MEMBER EDIT/NEW MODAL ── */}
         {editingMember && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-paper-raised border border-rule rounded-md max-w-xl w-full p-6 shadow-xl my-8">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-rule">
-                <h3 className="text-xl font-display font-semibold text-ink">
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+            <div className="bg-paper-raised border border-rule rounded-md max-w-xl w-full p-4 sm:p-6 shadow-xl my-4 sm:my-8 max-h-[85vh] sm:max-h-[90vh] flex flex-col">
+              <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-rule flex-shrink-0">
+                <h3 className="text-lg sm:text-xl font-display font-semibold text-ink">
                   {editingMember.isNew ? "Add Team Member" : "Edit Team Member"}
                 </h3>
                 <button
                   onClick={() => setEditingMember(null)}
-                  className="p-2 text-ink-muted hover:text-ink rounded min-h-[40px] min-w-[40px] inline-flex items-center justify-center"
+                  className="p-1.5 sm:p-2 text-ink-muted hover:text-ink rounded min-h-[36px] sm:min-h-[40px] min-w-[36px] sm:min-w-[40px] inline-flex items-center justify-center"
                 >
                   <X size={20} />
                 </button>
               </div>
 
-              <form onSubmit={handleSaveMember} className="space-y-4">
+              <form onSubmit={handleSaveMember} className="space-y-3 sm:space-y-4 overflow-y-auto flex-1 pr-1 sm:pr-2">
                 {formError && (
                   <p className="font-mono text-xs text-red-500 flex items-center gap-1">
                     <ShieldAlert size={14} /> {formError}
                   </p>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
                       Member Name
@@ -1229,8 +1229,8 @@ export default function Admin() {
                   <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
                     Profile Photo / Avatar (ImgBB Upload)
                   </label>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 bg-paper border border-rule rounded-md">
-                    <div className="w-16 h-16 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center relative">
+                  <div className="flex flex-row items-center gap-3 sm:gap-4 p-2.5 sm:p-3 bg-paper border border-rule rounded-md">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-md overflow-hidden bg-indigo/10 border border-rule flex-shrink-0 flex items-center justify-center relative">
                       {memberForm.image ? (
                         <img
                           src={memberForm.image}
@@ -1320,15 +1320,15 @@ export default function Admin() {
                     Bio
                   </label>
                   <textarea
-                    rows={3}
+                    rows={2}
                     required
                     value={memberForm.bio}
                     onChange={(e) => setMemberForm({ ...memberForm, bio: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper border border-rule rounded font-body text-ink"
+                    className="w-full px-3 py-1.5 sm:py-2 bg-paper border border-rule rounded font-body text-ink sm:rows-3"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block font-mono text-xs text-ink-muted uppercase mb-1">
                       GitHub Profile URL
