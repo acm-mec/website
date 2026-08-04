@@ -98,7 +98,7 @@
   - *Where it belongs*: Main heading for the About preview.
 - **Paragraph 1**: `ACM MEC is the official student chapter of the Association for Computing Machinery at Government Model Engineering College, connecting students to a global computing community through hackathons, workshops, and hands-on learning that bridge classroom knowledge with real-world skill`
   - *Where it belongs*: First paragraph of the preview.
-- **Paragraph 2**: `We're open to everyone. You don't need a CS background, a GitHub profile, or a startup ideaaaaaaaaaaaaaaaa. You just need to show up.`
+- **Paragraph 2**: `We're open to everyone. You don't need a CS background, a GitHub profile, or a startup idea. You just need to show up.`
   - *Where it belongs*: Second paragraph of the preview.
 - **Learn More Link Text**: `Learn more about us`
   - *Where it belongs*: Link text leading to `/about`.
