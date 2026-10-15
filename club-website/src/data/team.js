@@ -1,12 +1,21 @@
 export const team = [
   {
+    "id": "member-415846",
+    "name": "Dr.  Sony P",
+    "role": "Staff-in-Charge",
+    "year": "Assistant Professor, CSE",
+    "bio": ".",
+    "socials": {
+      "linkedin": "https://in.linkedin.com/in/dr-sony-p-76332245"
+    }
+  },
+  {
     "id": "president",
     "name": "Snigdha K Sudheesh",
     "role": "Chair",
     "year": "2nd Year, CSE",
     "bio": " Leads the chapter's overall direction, represents ACM MEC externally, and oversees all verticals.",
     "socials": {},
-    "image": "https://i.ibb.co/LTc6MK1/Starry-purple-magenta-nebula-sky-202607261132.jpg"
   },
   {
     "id": "vice-president",
